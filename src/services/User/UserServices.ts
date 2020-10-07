@@ -33,7 +33,7 @@ class UserServices {
         });
 
         if (checkUserEmailExists) {
-            throw new AppError('E-mail já cadastrado');
+            throw new AppError('E-mail já cadastrado', 401);
         }
 
         const hashedPassword = await hash(password, 8);
