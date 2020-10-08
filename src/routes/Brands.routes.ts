@@ -36,6 +36,7 @@ brandsRouter.patch('/:id/avatar', ensureAuthenticated, upload.single('avatar'), 
     const avatar = request.file.filename;
 
     const brand = await brandServices.updateAvatar({ id, avatar });
+    const brands = await brandServices.updateAvatar({ id, avatar });
 
     response.json(brand);
 });
