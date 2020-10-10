@@ -8,15 +8,17 @@ import Product from '../../models/Product';
 interface RequestUpdateAvatarProduct {
     id: string;
     avatar: string;
+    user_id: string;
 }
 
 interface RequestUpdateBackgroundProduct {
     id: string;
     background: string;
+    user_id: string;
 }
 
 class ProductServices {
-    public async updateAvatar({ id, avatar }: RequestUpdateAvatarProduct): Promise<Product> {
+    public async updateAvatar({ id, avatar, user_id }: RequestUpdateAvatarProduct): Promise<Product> {
         const productsRepository = getRepository(Product);
 
         const product = await productsRepository.findOne({
@@ -24,7 +26,11 @@ class ProductServices {
         });
 
         if (!product) {
-            throw new AppError('Marca não encontrada', 401);
+            throw new AppError('Produto não encontrado', 401);
+        }
+
+        if (product.user_id !== user_id) {
+            throw new AppError('Produto não pertence ao usuário', 401);
         }
 
         if (product.avatar) {
@@ -43,7 +49,7 @@ class ProductServices {
         return product;
     }
 
-    public async updateBackground({ id, background }: RequestUpdateBackgroundProduct): Promise<Product> {
+    public async updateBackground({ id, background, user_id }: RequestUpdateBackgroundProduct): Promise<Product> {
         const productsRepository = getRepository(Product);
 
         const product = await productsRepository.findOne({
@@ -54,12 +60,16 @@ class ProductServices {
             throw new AppError('Marca não encontrada', 401);
         }
 
-        if (product.avatar) {
-            const productAvatarFilePath = path.join(uploadConfig.directory, product.avatar);
-            const productAvatarFileExists = await fs.promises.stat(productAvatarFilePath);
+        if (product.user_id !== user_id) {
+            throw new AppError('Produto não pertence ao usuário', 401);
+        }
 
-            if (productAvatarFileExists) {
-                await fs.promises.unlink(productAvatarFilePath);
+        if (product.background) {
+            const productBackgroundFilePath = path.join(uploadConfig.directory, product.background);
+            const productBackgroundFileExists = await fs.promises.stat(productBackgroundFilePath);
+
+            if (productBackgroundFileExists) {
+                await fs.promises.unlink(productBackgroundFilePath);
             }
         }
 

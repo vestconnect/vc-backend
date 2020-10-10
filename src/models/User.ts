@@ -1,5 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
+enum TypeUser {
+    User,
+    Brand,
+    Admin
+}
+
 @Entity('users')
 class User {
     @PrimaryGeneratedColumn('uuid')
@@ -19,6 +25,12 @@ class User {
 
     @Column('varchar')
     avatar: string;
+
+    @Column('varchar')
+    type: TypeUser
+
+    @Column('varchar')
+    nickname: string;
 
     @CreateDateColumn()
     created_at: Date;

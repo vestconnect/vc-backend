@@ -6,11 +6,19 @@ import AppError from '../../errors/AppError';
 import User from '../../models/User';
 import uploadConfig from '../../config/upload';
 
+enum TypeUser {
+    User,
+    Brand,
+    Admin
+}
+
 interface RequestCreateUser {
     name: string;
     email: string;
     password: string;
     birth: Date;
+    type: TypeUser;
+    nickname: string;
 }
 
 interface RequestUpdatePasswordUser {
@@ -24,7 +32,7 @@ interface RequestUpdateAvatarUser {
 }
 
 class UserServices {
-    public async createUser({ name, email, password, birth }: RequestCreateUser): Promise<User> {
+    public async createUser({ name, email, password, birth, type, nickname }: RequestCreateUser): Promise<User> {
         const userRepository = getRepository(User);
 
         const checkUserEmailExists = await userRepository.findOne({
@@ -42,7 +50,9 @@ class UserServices {
             name,
             email,
             password: hashedPassword,
-            birth
+            birth,
+            type,
+            nickname
         });
 
         await userRepository.save(user);

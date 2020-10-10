@@ -5,7 +5,7 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const productTagRouter = Router();
 
-productTagRouter.get('/product/:id', ensureAuthenticated, async (request, response) => {
+productTagRouter.get('/:id', ensureAuthenticated, async (request, response) => {
     const productTagRepository = getRepository(ProductTag);
     const product_id = request.params.id;
 

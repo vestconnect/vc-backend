@@ -1,14 +1,11 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
-import Brand from './Brand';
+import User from './User';
 
 @Entity('products')
 class Product {
     @PrimaryGeneratedColumn('uuid')
     id: string;
-
-    @Column('uuid')
-    brand_id: string;
 
     @Column('varchar')
     title: string;
@@ -28,9 +25,15 @@ class Product {
     @Column('varchar')
     background: string;
 
-    @OneToOne(() => Brand)
-    @JoinColumn({ name: 'brand_id' })
-    brand: Brand;
+    @Column('varchar')
+    description: string;
+
+    @Column('uuid')
+    user_id: string;
+
+    @OneToOne(() => User)
+    @JoinColumn({ name: 'user_id' })
+    user: User;
 }
 
 export default Product;

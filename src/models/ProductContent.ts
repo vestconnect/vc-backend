@@ -3,9 +3,9 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 import Product from './Product';
 
 enum Type {
-    Photos,
-    Videos,
-    Texts
+    Photos = "P",
+    Videos = "V",
+    Texts = "T"
 }
 
 @Entity('products_content')
@@ -18,6 +18,9 @@ class ProductContent {
 
     @Column('varchar')
     type: Type;
+
+    @Column('varchar')
+    background: string;
 
     @Column('uuid')
     product_id: string;

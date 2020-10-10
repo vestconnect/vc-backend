@@ -69,14 +69,16 @@ usersRouter.get('/', async (request, response) => {
 });
 
 usersRouter.post('/', async (request, response) => {
-    const { name, email, password, birth } = request.body;
+    const { name, email, password, birth, type, nickname } = request.body;
     const createUser = new UserServices();
 
     const user = await createUser.createUser({
         name,
         email,
         password,
-        birth
+        birth,
+        type,
+        nickname
     });
 
     const authenticateUser = new AuthenticateUserServices();
