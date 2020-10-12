@@ -14,6 +14,9 @@ class ProductUser {
     @Column('uuid')
     user_id: string;
 
+    @Column('boolean')
+    read: boolean;
+
     @OneToOne(() => Product)
     @JoinColumn({ name: 'product_id' })
     product: Product;

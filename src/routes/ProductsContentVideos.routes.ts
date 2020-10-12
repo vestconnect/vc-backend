@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { Router } from 'express';
 import multer from 'multer';
 import ProductContentVideo from '../models/ProductContentVideo';
+import ProductUserNotification from '../models/ProductUserNotification';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import uploadConfig from '../config/upload';
 import ProductContentVideoServices from '../services/ProductContentVideo/ProductContentVideoServices';
@@ -11,11 +12,25 @@ const upload = multer(uploadConfig);
 
 productContentVideoRouter.get('/:id', ensureAuthenticated, async (request, response) => {
     const productContentVideoRepository = getRepository(ProductContentVideo);
+    const productUserNotificationRepository = getRepository(ProductUserNotification);
+    const user_id = request.user.id;
     const content_id = request.params.id;
 
     const productContentVideo = await productContentVideoRepository.find({
         where: { content_id }
     });
+
+    const productUserNotification = await productUserNotificationRepository.find({
+        where: { user_id, read: false }
+    });
+
+    if (productUserNotification.length) {
+        productUserNotification.forEach(item => {
+            item.read = true;
+        });
+
+        await productUserNotificationRepository.save(productUserNotification);
+    }
 
     response.json(productContentVideo);
 });

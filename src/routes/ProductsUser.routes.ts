@@ -3,6 +3,7 @@ import { Router } from 'express';
 import ProductUserServices from '../services/ProductUser/ProductUserServices';
 import ProductUser from '../models/ProductUser';
 import ProductTag from '../models/ProductTag';
+import ProductUserNotification from '../models/ProductUserNotification';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const productsUserRouter = Router();
@@ -10,6 +11,7 @@ const productsUserRouter = Router();
 productsUserRouter.get('/', ensureAuthenticated, async (request, response) => {
     const productUserRepository = getRepository(ProductUser);
     const productTagRepository = getRepository(ProductTag);
+    const productUserNotificationRepository = getRepository(ProductUserNotification);
     const user_id = request.user.id;
 
     const productUser = await productUserRepository.find({
@@ -19,7 +21,11 @@ productsUserRouter.get('/', ensureAuthenticated, async (request, response) => {
 
     const productTags = await productTagRepository.find({
         where: { product_id: In(productUser.map(product => product.product_id)) }
-    })
+    });
+
+    const productUserNotification = await productUserNotificationRepository.count({
+        where: { read: false }
+    });
 
     const responseProductUser = productUser.map(product => {
         return {
@@ -38,7 +44,8 @@ productsUserRouter.get('/', ensureAuthenticated, async (request, response) => {
                     avatar: product.product.user.avatar
                 }
             },
-            tag: productTags.filter(tag => tag.product_id === product.product_id)
+            tag: productTags.filter(tag => tag.product_id === product.product_id),
+            content: productUserNotification
         }
     })
 
