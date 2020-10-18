@@ -24,6 +24,7 @@ interface RequestCreateUser {
 interface RequestUpdatePasswordUser {
     id: string;
     password: string;
+    email: string;
 }
 
 interface RequestUpdateAvatarUser {
@@ -60,7 +61,7 @@ class UserServices {
         return user;
     }
 
-    public async updatePassword({ id, password }: RequestUpdatePasswordUser): Promise<User> {
+    public async updatePassword({ id, password, email }: RequestUpdatePasswordUser): Promise<User> {
         const userRepository = getRepository(User);
 
         const user = await userRepository.findOne({
@@ -72,9 +73,15 @@ class UserServices {
             throw new AppError('Usuário inválido');
         }
 
-        const hashedPassword = await hash(password, 8);
+        if (password) {
+            const hashedPassword = await hash(password, 8);
 
-        user.password = hashedPassword;
+            user.password = hashedPassword;
+        }
+
+        if (email) {
+            user.email = email;
+        }
 
         userRepository.save(user);
 

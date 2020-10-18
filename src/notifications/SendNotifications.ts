@@ -76,8 +76,6 @@ class SendNotification {
                     throw new AppError(error, 500);
                 }
             }
-
-
         }
     }
 }

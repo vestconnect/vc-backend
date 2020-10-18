@@ -90,11 +90,11 @@ usersRouter.post('/', async (request, response) => {
 
 usersRouter.patch('/password', ensureAuthenticated, async (request, response) => {
     const id = request.user.id;
-    const { password } = request.body;
+    const { email, password } = request.body;
 
     const updatePassword = new UserServices();
 
-    const user = await updatePassword.updatePassword({ id, password });
+    const user = await updatePassword.updatePassword({ id, password, email });
 
     response.json(user);
 });

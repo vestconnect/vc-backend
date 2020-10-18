@@ -48,7 +48,7 @@ productContentPhotoRouter.patch('/:id/background', ensureAuthenticated, upload.s
     response.json(productContentPhoto);
 });
 
-productContentPhotoRouter.patch('/:id/file', ensureAuthenticated, upload.single('background'), async (request, response) => {
+productContentPhotoRouter.patch('/:id/file', ensureAuthenticated, upload.single('file'), async (request, response) => {
     const productContentPhotoServices = new ProductContentPhotoServices();
     const id = request.params.id;
     const file = request.file.filename;
