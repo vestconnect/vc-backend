@@ -10,6 +10,7 @@ import uploadConfig from '../config/upload';
 
 import User from '../models/User';
 import UserToken from '../models/UserToken';
+import firebaseAdmin from 'firebase-admin';
 
 const usersRouter = Router();
 const upload = multer(uploadConfig);
@@ -54,11 +55,16 @@ usersRouter.get('/', async (request, response) => {
 
         let tickets = [];
 
+        console.log(chunks);
+
         for (let chunk of chunks) {
             try {
                 let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
 
                 tickets.push(...ticketChunk);
+
+                console.log(ticketChunk);
+
             } catch (error) {
                 console.error(error);
             }
