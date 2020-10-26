@@ -11,6 +11,7 @@ import ProductsContentRouterPhotos from './ProductsContentPhotos.routes';
 import ProductsContentRouterTexts from './ProductsContentTexts.routes';
 import ProductsContentRouterVideos from './ProductsContentVideos.routes';
 import ProductsUserRouter from './ProductsUser.routes';
+import UserTokenReset from './UserTokenReset.routes';
 
 const routes = Router();
 
@@ -25,5 +26,6 @@ routes.use('/productscontentphotos', ProductsContentRouterPhotos);
 routes.use('/productscontenttexts', ProductsContentRouterTexts);
 routes.use('/productscontentvideos', ProductsContentRouterVideos);
 routes.use('/productsuser', ProductsUserRouter);
+routes.use('/password', UserTokenReset);
 
 export default routes;
