@@ -6,6 +6,8 @@ enum TypeUser {
     Admin
 }
 
+import { Exclude, Expose } from 'class-transformer';
+
 @Entity('users')
 class User {
     @PrimaryGeneratedColumn('uuid')
@@ -18,6 +20,7 @@ class User {
     email: string;
 
     @Column('varchar')
+    @Exclude()
     password: string;
 
     @Column('date')
@@ -32,11 +35,19 @@ class User {
     @Column('varchar')
     nickname: string;
 
+    @Column('boolean')
+    confirm_email: boolean;
+
     @CreateDateColumn()
     created_at: Date;
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @Expose({ name: 'avatar_url' })
+    getAvatarUrl(): string | null {
+        return this.avatar ? `${process.env.APP_API_URL}/files/${this.avatar}` : null;
+    }
 }
 
 export default User;

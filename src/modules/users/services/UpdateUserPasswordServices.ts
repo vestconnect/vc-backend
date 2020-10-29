@@ -3,6 +3,7 @@ import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import User from '../infra/typeorm/entities/User';
+import { classToClass } from 'class-transformer';
 
 interface IRequest {
     id: string;
@@ -38,7 +39,7 @@ class CreateUserServices {
 
         await this.usersRepository.save(user);
 
-        return user;
+        return classToClass(user);
     }
 }
 

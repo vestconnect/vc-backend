@@ -6,6 +6,7 @@ import AppError from '@shared/errors/AppError';
 import jwtConfig from '@config/auth';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import { classToClass } from 'class-transformer';
 
 interface Request {
     email: string;
@@ -40,7 +41,15 @@ class AuthenticateUserServices {
             throw new AppError('E-mail ou senha incorreto!', 200);
         }
 
+        if (!user.confirm_email) {
+            throw new AppError('E-mail não confirmado!', 200);
+        }
+
         const { secret, expiresIn } = jwtConfig.jwt;
+
+        if (!secret) {
+            throw new AppError('Secret JWT não definido!', 200);
+        }
 
         const token = sign({}, secret, {
             subject: user.id,
@@ -48,7 +57,7 @@ class AuthenticateUserServices {
         });
 
         return {
-            user,
+            user: classToClass(user),
             token
         }
     }

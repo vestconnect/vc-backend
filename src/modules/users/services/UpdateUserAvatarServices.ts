@@ -5,6 +5,7 @@ import User from '../infra/typeorm/entities/User';
 import path from 'path';
 import uploadConfig from '@config/upload';
 import fs from 'fs';
+import { classToClass } from 'class-transformer';
 
 interface IRequest {
     id: string;
@@ -38,7 +39,7 @@ class UpdateUserAvatarServices {
 
         await this.usersRepository.save(user);
 
-        return user;
+        return classToClass(user);
     }
 }
 
