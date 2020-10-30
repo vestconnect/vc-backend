@@ -9,7 +9,7 @@ import ProductContentPhotoFileController from '../controllers/ProductContentPhot
 import ProductsContentPhotoController from '../controllers/ProductsContentPhotoController';
 
 const productContentPhotoRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const productContentPhotoBackgroundController = new ProductContentPhotoBackgroundController();
 const productContentPhotoFileController = new ProductContentPhotoFileController();
 const productsContentPhotoController = new ProductsContentPhotoController();

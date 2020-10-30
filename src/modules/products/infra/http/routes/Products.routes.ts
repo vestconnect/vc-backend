@@ -9,7 +9,7 @@ import ProductAvatarController from '../controllers/ProductAvatarController';
 import ProductBackgroundController from '../controllers/ProductBackgroundController';
 
 const productsRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const productsController = new ProductsController();
 const productAvatarController = new ProductAvatarController();
 const productBackgroundController = new ProductBackgroundController();

@@ -9,7 +9,7 @@ import ProductContentVideoBackgroundController from '../controllers/ProductConte
 import ProductContentVideoFileController from '../controllers/ProductContentVideoFileController';
 
 const productContentVideoRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const productsContentVideoController = new ProductsContentVideoController();
 const productContentVideoBackgroundController = new ProductContentVideoBackgroundController();
 const productContentVideoFileController = new ProductContentVideoFileController();

@@ -7,7 +7,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 import ProductsContentController from '../controllers/ProductsContentController';
 import ProductContentBackgroundController from '../controllers/ProductContentBackgroundController';
 
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const productsContentRouter = Router();
 const productsContentController = new ProductsContentController();
 const productContentBackgroundController = new ProductContentBackgroundController();

@@ -12,7 +12,7 @@ import User from '@modules/users/infra/typeorm/entities/User';
 import { classToClass } from 'class-transformer';
 
 const usersRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const usersController = new UsersController();
 const userPasswordController = new UserPasswordController();
 const userAvatarController = new UserAvatarController();

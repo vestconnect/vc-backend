@@ -17,7 +17,7 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, GET, DELETE, OPTIONS');
     next();
 });
-app.use('/files', express.static(uploadConfig.directory));
+app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);
 
 app.use((err: Error, request: Request, response: Response, next: NextFunction) => {

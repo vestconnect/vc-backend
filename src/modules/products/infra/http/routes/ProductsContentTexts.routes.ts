@@ -9,7 +9,7 @@ import ProductContentTextBackgroundController from '../controllers/ProductConten
 import ProductContentTextFileController from '../controllers/ProductContentTextFileController';
 
 const productContentTextRouter = Router();
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 const productsContentTextController = new ProductsContentTextController();
 const productContentTextBackgroundController = new ProductContentTextBackgroundController();
 const productContentTextFileController = new ProductContentTextFileController();
