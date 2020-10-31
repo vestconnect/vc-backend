@@ -7,7 +7,7 @@ import ProductsUserController from '../controllers/ProductsUserController';
 const productsUserRouter = Router();
 const productsUserController = new ProductsUserController();
 
-productsUserRouter.get('/', ensureAuthenticated, productsUserController.show);
+productsUserRouter.get('/', ensureAuthenticated, productsUserController.index);
 productsUserRouter.post('/', ensureAuthenticated, productsUserController.create);
 productsUserRouter.post('/notifications', ensureAuthenticated, async (request, response) => {
     const { products } = request.body;

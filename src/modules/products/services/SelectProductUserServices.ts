@@ -3,6 +3,29 @@ import IProductsUserRepository from '@modules/products/repositories/IProductsUse
 import IProductsTagsRepository from '@modules/products/repositories/IProductsTagsRepository';
 import ISelectedProductsUserNotificationsRepository from '@modules/products/repositories/ISelectedProductsUserNotificationsRepository';
 import IProductsUserNotificationsRepository from '@modules/products/repositories/IProductsUserNotificationsRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import ProductTag from '../infra/typeorm/entities/ProductTag';
+
+interface IResponse {
+    id: string;
+    product_id: string;
+    product: {
+        title: string;
+        subtitle: string;
+        nfc_id: string;
+        validate: Date;
+        avatar_url: string;
+        background_url: string;
+        description: string;
+        user: {
+            nickname: string;
+            avatar_url: string;
+        }
+    },
+    tag: ProductTag[];
+    content: number;
+    notification: boolean;
+}
 
 @injectable()
 class SelectProductUserServices {
@@ -14,45 +37,53 @@ class SelectProductUserServices {
         @inject('ProductsUserNotificationsRepository')
         private productsUserNotificationsRepository: IProductsUserNotificationsRepository,
         @inject('SelectedProductsUserNotificationsRepository')
-        private selectedProductsUserNotificationsRepository: ISelectedProductsUserNotificationsRepository
+        private selectedProductsUserNotificationsRepository: ISelectedProductsUserNotificationsRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider
     ) { }
 
-    public async show(user_id: string): Promise<object[]> {
-        const productUser = await this.productsUserRepository.findByUser(user_id, [
-            'product', 'product.user'
-        ]);
+    public async execute(user_id: string): Promise<object[]> {
+        let responseProductUser = await this.cacheProvider.recover<IResponse[]>(`productuser-list:${user_id}`);
 
-        if (!productUser.length) {
-            return [];
-        }
+        if (!responseProductUser?.length) {
+            const productUser = await this.productsUserRepository.findByUser(user_id, [
+                'product', 'product.user'
+            ]);
 
-        const products = productUser.map(product => product.product_id);
-        const productTags = await this.productsTagsRepository.findByProductIds(products);
-        const productsUserNotifications = await this.productsUserNotificationsRepository.countNotReadNotificationsByUser(user_id);
-        const selectedProductsUserNotifications = await this.selectedProductsUserNotificationsRepository.findAlls(user_id, products);
-
-        const responseProductUser = productUser.map(product => {
-            return {
-                id: product.id,
-                product_id: product.product_id,
-                product: {
-                    title: product.product.title,
-                    subtitle: product.product.subtitle,
-                    nfc_id: product.product.nfc_id,
-                    validate: product.product.validate,
-                    avatar_url: product.product.getAvatarUrl(),
-                    background_url: product.product.getBackgroundUrl(),
-                    description: product.product.description,
-                    user: {
-                        nickname: product.product.user.nickname,
-                        avatar_url: product.product.user.getAvatarUrl()
-                    }
-                },
-                tag: productTags.filter(tag => tag.product_id === product.product_id),
-                content: productsUserNotifications,
-                notification: selectedProductsUserNotifications.some(prd => prd.product_id === product.product_id)
+            if (!productUser.length) {
+                return [];
             }
-        });
+
+            const products = productUser.map(product => product.product_id);
+            const productTags = await this.productsTagsRepository.findByProductIds(products);
+            const productsUserNotifications = await this.productsUserNotificationsRepository.countNotReadNotificationsByUser(user_id);
+            const selectedProductsUserNotifications = await this.selectedProductsUserNotificationsRepository.findAlls(user_id, products);
+
+            responseProductUser = productUser.map(product => {
+                return {
+                    id: product.id,
+                    product_id: product.product_id,
+                    product: {
+                        title: product.product.title,
+                        subtitle: product.product.subtitle,
+                        nfc_id: product.product.nfc_id,
+                        validate: product.product.validate,
+                        avatar_url: product.product.getAvatarUrl(),
+                        background_url: product.product.getBackgroundUrl(),
+                        description: product.product.description,
+                        user: {
+                            nickname: product.product.user.nickname,
+                            avatar_url: product.product.user.getAvatarUrl()
+                        }
+                    },
+                    tag: productTags.filter(tag => tag.product_id === product.product_id),
+                    content: productsUserNotifications,
+                    notification: selectedProductsUserNotifications.some(prd => prd.product_id === product.product_id)
+                } as IResponse;
+            });
+
+            await this.cacheProvider.save(`productuser-list:${user_id}`, responseProductUser);
+        }
 
         return responseProductUser;
     }

@@ -5,6 +5,7 @@ import IProductsUserRepository from '@modules/products/repositories/IProductsUse
 import IProductsTagsRepository from '@modules/products/repositories/IProductsTagsRepository';
 import ISelectedProductsUserNotificationsRepository from '@modules/products/repositories/ISelectedProductsUserNotificationsRepository';
 import IProductsUserNotificationsRepository from '@modules/products/repositories/IProductsUserNotificationsRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 interface IRequest {
     nfc_id: string;
@@ -23,7 +24,9 @@ class CreateProductUserServices {
         @inject('ProductsUserNotificationsRepository')
         private productsUserNotificationsRepository: IProductsUserNotificationsRepository,
         @inject('SelectedProductsUserNotificationsRepository')
-        private selectedProductsUserNotificationsRepository: ISelectedProductsUserNotificationsRepository
+        private selectedProductsUserNotificationsRepository: ISelectedProductsUserNotificationsRepository,
+        @inject('CacheProvider')
+        private cacheProvider: ICacheProvider
     ) { }
 
     public async execute({ nfc_id, user_id }: IRequest): Promise<object> {
@@ -80,6 +83,8 @@ class CreateProductUserServices {
             content: productUserNotification,
             notification: productNotification.length > 0 ? true : false
         }
+
+        await this.cacheProvider.invalidate(`productuser-list:${user_id}`);
 
         return responseProductUser;
     }

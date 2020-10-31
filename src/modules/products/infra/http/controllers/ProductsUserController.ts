@@ -17,11 +17,11 @@ export default class ProductsUserController {
         return response.json(productUser);
     }
 
-    public async show(request: Request, response: Response): Promise<Response> {
+    public async index(request: Request, response: Response): Promise<Response> {
         const selectProductUserServices = container.resolve(SelectProductUserServices);
         const user_id = request.user.id;
 
-        const productsUser = await selectProductUserServices.show(user_id);
+        const productsUser = await selectProductUserServices.execute(user_id);
 
         return response.json(productsUser);
     }

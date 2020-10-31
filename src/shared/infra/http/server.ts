@@ -5,6 +5,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import AppError from '@shared/errors/AppError';
 import uploadConfig from '@config/upload';
 import routes from './routes';
+import rateLimiter from './middlewares/rateLimiter';
 import '@shared/infra/typeorm';
 import '@shared/container';
 
@@ -17,6 +18,7 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, GET, DELETE, OPTIONS');
     next();
 });
+app.use(rateLimiter);
 app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);
 
