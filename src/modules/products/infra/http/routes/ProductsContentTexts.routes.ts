@@ -7,6 +7,7 @@ import uploadConfig from '@config/upload';
 import ProductsContentTextController from '../controllers/ProductsContentTextController';
 import ProductContentTextBackgroundController from '../controllers/ProductContentTextBackgroundController';
 import ProductContentTextFileController from '../controllers/ProductContentTextFileController';
+import { classToClass } from 'class-transformer';
 
 const productContentTextRouter = Router();
 const upload = multer(uploadConfig.multer);
@@ -22,7 +23,7 @@ productContentTextRouter.get('/:id', ensureAuthenticated, async (request, respon
         where: { content_id }
     });
 
-    response.json(productContentText);
+    response.json(classToClass(productContentText));
 });
 
 productContentTextRouter.post('/', ensureAuthenticated, productsContentTextController.create);

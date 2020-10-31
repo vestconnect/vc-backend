@@ -7,6 +7,7 @@ import uploadConfig from '@config/upload';
 import ProductsContentVideoController from '../controllers/ProductsContentVideoController';
 import ProductContentVideoBackgroundController from '../controllers/ProductContentVideoBackgroundController';
 import ProductContentVideoFileController from '../controllers/ProductContentVideoFileController';
+import { classToClass } from 'class-transformer';
 
 const productContentVideoRouter = Router();
 const upload = multer(uploadConfig.multer);
@@ -22,7 +23,7 @@ productContentVideoRouter.get('/:id', ensureAuthenticated, async (request, respo
         where: { content_id }
     });
 
-    response.json(productContentVideo);
+    response.json(classToClass(productContentVideo));
 });
 
 productContentVideoRouter.post('/', ensureAuthenticated, productsContentVideoController.create);

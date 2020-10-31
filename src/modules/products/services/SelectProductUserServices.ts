@@ -40,12 +40,12 @@ class SelectProductUserServices {
                     subtitle: product.product.subtitle,
                     nfc_id: product.product.nfc_id,
                     validate: product.product.validate,
-                    avatar: product.product.avatar,
-                    background: product.product.background,
+                    avatar_url: product.product.getAvatarUrl(),
+                    background_url: product.product.getBackgroundUrl(),
                     description: product.product.description,
                     user: {
                         nickname: product.product.user.nickname,
-                        avatar: product.product.user.avatar
+                        avatar_url: product.product.user.getAvatarUrl()
                     }
                 },
                 tag: productTags.filter(tag => tag.product_id === product.product_id),

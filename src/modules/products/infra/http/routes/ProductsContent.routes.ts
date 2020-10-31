@@ -6,6 +6,7 @@ import ProductContent from '../../typeorm/entities/ProductContent';
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import ProductsContentController from '../controllers/ProductsContentController';
 import ProductContentBackgroundController from '../controllers/ProductContentBackgroundController';
+import { classToClass } from 'class-transformer';
 
 const upload = multer(uploadConfig.multer);
 const productsContentRouter = Router();
@@ -21,7 +22,7 @@ productsContentRouter.get('/:id/:type', ensureAuthenticated, async (request, res
         where: { product_id, type }
     });
 
-    response.json(productContent);
+    response.json(classToClass(productContent));
 });
 
 productsContentRouter.post('/', ensureAuthenticated, productsContentController.create);

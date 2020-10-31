@@ -3,9 +3,6 @@ import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import User from '../infra/typeorm/entities/User';
-import path from 'path';
-import uploadConfig from '@config/upload';
-import fs from 'fs';
 import { classToClass } from 'class-transformer';
 
 interface IRequest {

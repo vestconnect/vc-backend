@@ -30,5 +30,6 @@ usersRouter.post('/', usersController.create);
 usersRouter.patch('/password', ensureAuthenticated, userPasswordController.update);
 usersRouter.patch('/avatar', ensureAuthenticated, upload.single('avatar'), userAvatarController.update);
 usersRouter.patch('/confirm', confirmEmailController.update);
+usersRouter.post('/send', usersController.index);
 
 export default usersRouter;

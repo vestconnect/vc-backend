@@ -7,6 +7,7 @@ import uploadConfig from '@config/upload';
 import ProductContentPhotoBackgroundController from '../controllers/ProductContentPhotoBackgroundController';
 import ProductContentPhotoFileController from '../controllers/ProductContentPhotoFileController';
 import ProductsContentPhotoController from '../controllers/ProductsContentPhotoController';
+import { classToClass } from 'class-transformer';
 
 const productContentPhotoRouter = Router();
 const upload = multer(uploadConfig.multer);
@@ -22,7 +23,7 @@ productContentPhotoRouter.get('/:id', ensureAuthenticated, async (request, respo
         where: { content_id }
     });
 
-    response.json(productContentPhoto);
+    response.json(classToClass(productContentPhoto));
 });
 productContentPhotoRouter.post('/', ensureAuthenticated, productsContentPhotoController.create);
 productContentPhotoRouter.patch('/:id/background', ensureAuthenticated, upload.single('background'), productContentPhotoBackgroundController.update);

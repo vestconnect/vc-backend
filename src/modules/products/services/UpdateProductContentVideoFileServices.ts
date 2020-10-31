@@ -1,10 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import path from 'path';
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
-import uploadConfig from '@config/upload';
 import ProductContentVideo from '../infra/typeorm/entities/ProductContentVideo';
 import IProductsContentVideoRepository from '../repositories/IProductsContentVideoRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
+import { classToClass } from 'class-transformer';
 
 interface IRequest {
     id: string;
@@ -15,7 +14,9 @@ interface IRequest {
 class UpdateProductContentVideoFileServices {
     constructor(
         @inject('ProductsContentVideoRepository')
-        private productsContentVideoRepository: IProductsContentVideoRepository
+        private productsContentVideoRepository: IProductsContentVideoRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
 
     public async execute({ id, file }: IRequest): Promise<ProductContentVideo> {
@@ -26,19 +27,16 @@ class UpdateProductContentVideoFileServices {
         }
 
         if (productContentVideo.file) {
-            const productContentVideoFileFilePath = path.join(uploadConfig.directory, productContentVideo.file);
-            const productContentVideoFileFileExists = await fs.promises.stat(productContentVideoFileFilePath);
-
-            if (productContentVideoFileFileExists) {
-                await fs.promises.unlink(productContentVideoFileFilePath);
-            }
+            await this.storageProvider.deleteFile(productContentVideo.file);
         }
 
-        productContentVideo.file = file;
+        const fileName = await this.storageProvider.saveFile(file);
+
+        productContentVideo.file = fileName;
 
         await this.productsContentVideoRepository.save(productContentVideo);
 
-        return productContentVideo;
+        return classToClass(productContentVideo);
     }
 }
 

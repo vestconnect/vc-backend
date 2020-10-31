@@ -7,6 +7,7 @@ import uploadConfig from '@config/upload';
 import ProductsController from '../controllers/ProductsController';
 import ProductAvatarController from '../controllers/ProductAvatarController';
 import ProductBackgroundController from '../controllers/ProductBackgroundController';
+import { classToClass } from 'class-transformer';
 
 const productsRouter = Router();
 const upload = multer(uploadConfig.multer);
@@ -22,8 +23,9 @@ productsRouter.get('/', ensureAuthenticated, async (request, response) => {
         where: { user_id }
     });
 
-    response.json(products);
+    response.json(classToClass(products));
 });
+productsRouter.get('/:nfc', productsController.index);
 productsRouter.post('/', ensureAuthenticated, productsController.create);
 productsRouter.patch('/:id/avatar', ensureAuthenticated, upload.single('avatar'), productAvatarController.update);
 productsRouter.patch('/:id/background', ensureAuthenticated, upload.single('background'), productBackgroundController.update);

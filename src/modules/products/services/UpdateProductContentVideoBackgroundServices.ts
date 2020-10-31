@@ -1,10 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import path from 'path';
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
-import uploadConfig from '@config/upload';
 import ProductContentVideo from '../infra/typeorm/entities/ProductContentVideo';
 import IProductsContentVideoRepository from '../repositories/IProductsContentVideoRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
+import { classToClass } from 'class-transformer';
 
 interface IRequest {
     id: string;
@@ -15,7 +14,9 @@ interface IRequest {
 class UpdateProductContentVideoBackgroundServices {
     constructor(
         @inject('ProductsContentVideoRepository')
-        private productsContentVideoRepository: IProductsContentVideoRepository
+        private productsContentVideoRepository: IProductsContentVideoRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
 
     public async execute({ id, background }: IRequest): Promise<ProductContentVideo> {
@@ -26,19 +27,16 @@ class UpdateProductContentVideoBackgroundServices {
         }
 
         if (productContentVideo.background) {
-            const productContentVideoBackgroundFilePath = path.join(uploadConfig.directory, productContentVideo.background);
-            const productContentVideoBackgroundFileExists = await fs.promises.stat(productContentVideoBackgroundFilePath);
-
-            if (productContentVideoBackgroundFileExists) {
-                await fs.promises.unlink(productContentVideoBackgroundFilePath);
-            }
+            await this.storageProvider.deleteFile(productContentVideo.background);
         }
 
-        productContentVideo.background = background;
+        const fileName = await this.storageProvider.saveFile(background);
+
+        productContentVideo.background = fileName;
 
         await this.productsContentVideoRepository.save(productContentVideo);
 
-        return productContentVideo;
+        return classToClass(productContentVideo);
     }
 }
 

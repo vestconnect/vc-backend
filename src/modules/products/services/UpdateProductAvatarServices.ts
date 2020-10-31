@@ -1,10 +1,9 @@
-import path from 'path';
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
-import uploadConfig from '@config/upload';
 import Product from '@modules/products/infra/typeorm/entities/Product';
 import IProductsRepository from '../repositories/IProductsRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 interface IRequestUpdateAvatarProduct {
     id: string;
@@ -16,7 +15,9 @@ interface IRequestUpdateAvatarProduct {
 class UpdateProductAvatarServices {
     constructor(
         @inject('ProductsRepository')
-        private productsRepository: IProductsRepository
+        private productsRepository: IProductsRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
 
     public async execute({ id, avatar, user_id }: IRequestUpdateAvatarProduct): Promise<Product> {
@@ -31,19 +32,16 @@ class UpdateProductAvatarServices {
         }
 
         if (product.avatar) {
-            const productAvatarFilePath = path.join(uploadConfig.directory, product.avatar);
-            const productAvatarFileExists = await fs.promises.stat(productAvatarFilePath);
-
-            if (productAvatarFileExists) {
-                await fs.promises.unlink(productAvatarFilePath);
-            }
+            await this.storageProvider.deleteFile(product.avatar);
         }
 
-        product.avatar = avatar;
+        const fileName = await this.storageProvider.saveFile(avatar);
+
+        product.avatar = fileName;
 
         await this.productsRepository.save(product);
 
-        return product;
+        return classToClass(product);
     }
 }
 

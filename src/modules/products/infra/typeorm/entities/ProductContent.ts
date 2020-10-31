@@ -1,6 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
 import Product from './Product';
+import { Expose } from 'class-transformer';
+import uploadConfig from '@config/upload';
 
 enum Type {
     Photos = "P",
@@ -28,6 +30,22 @@ class ProductContent {
     @OneToOne(() => Product)
     @JoinColumn({ name: 'product_id' })
     product: Product;
+
+    @Expose({ name: 'background_url' })
+    getBackgroundUrl(): string | null {
+        if (!this.background) {
+            return null;
+        }
+
+        switch (uploadConfig.driver) {
+            case 'disk':
+                return `${process.env.APP_API_URL}/files/${this.background}`
+            case 's3':
+                return `https://${uploadConfig.config.aws.bucket}.s3.us-east-2.amazonaws.com/${this.background}`
+            default:
+                return null;
+        }
+    }
 }
 
 export default ProductContent;

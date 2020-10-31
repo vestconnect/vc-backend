@@ -1,10 +1,9 @@
-import path from 'path';
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
-import uploadConfig from '@config/upload';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import Product from '@modules/products/infra/typeorm/entities/Product';
 import { injectable, inject } from 'tsyringe';
 import IProductsRepository from '@modules/products/repositories/IProductsRepository';
+import { classToClass } from 'class-transformer';
 
 interface IRequestUpdateBackgroundProduct {
     id: string;
@@ -16,7 +15,9 @@ interface IRequestUpdateBackgroundProduct {
 class UpdateProductBackgroundServices {
     constructor(
         @inject('ProductsRepository')
-        private productsRepository: IProductsRepository
+        private productsRepository: IProductsRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
 
     public async execute({ id, background, user_id }: IRequestUpdateBackgroundProduct): Promise<Product> {
@@ -31,19 +32,16 @@ class UpdateProductBackgroundServices {
         }
 
         if (product.background) {
-            const productBackgroundFilePath = path.join(uploadConfig.directory, product.background);
-            const productBackgroundFileExists = await fs.promises.stat(productBackgroundFilePath);
-
-            if (productBackgroundFileExists) {
-                await fs.promises.unlink(productBackgroundFilePath);
-            }
+            await this.storageProvider.deleteFile(product.background);
         }
 
-        product.background = background;
+        const fileName = await this.storageProvider.saveFile(background);
+
+        product.background = fileName;
 
         await this.productsRepository.save(product);
 
-        return product;
+        return classToClass(product);
     }
 }
 

@@ -1,10 +1,9 @@
 import { injectable, inject } from 'tsyringe';
-import path from 'path';
-import fs from 'fs';
 import AppError from '@shared/errors/AppError';
-import uploadConfig from '@config/upload';
 import ProductContentText from '../infra/typeorm/entities/ProductContentText';
 import IProductsContentTextRepository from '../repositories/IProductsContentTextRepository';
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
+import { classToClass } from 'class-transformer';
 
 interface IRequest {
     id: string;
@@ -15,7 +14,9 @@ interface IRequest {
 class UpdateProductContentTextFileServices {
     constructor(
         @inject('ProductsContentTextRepository')
-        private productsContentTextRepository: IProductsContentTextRepository
+        private productsContentTextRepository: IProductsContentTextRepository,
+        @inject('StorageProvider')
+        private storageProvider: IStorageProvider
     ) { }
 
     public async execute({ id, file }: IRequest): Promise<ProductContentText> {
@@ -26,19 +27,16 @@ class UpdateProductContentTextFileServices {
         }
 
         if (productContentText.file) {
-            const productContentTextFileFilePath = path.join(uploadConfig.directory, productContentText.file);
-            const productContentTextFileFileExists = await fs.promises.stat(productContentTextFileFilePath);
-
-            if (productContentTextFileFileExists) {
-                await fs.promises.unlink(productContentTextFileFilePath);
-            }
+            await this.storageProvider.deleteFile(productContentText.file);
         }
 
-        productContentText.file = file;
+        const fileName = await this.storageProvider.saveFile(file);
+
+        productContentText.file = fileName;
 
         await this.productsContentTextRepository.save(productContentText);
 
-        return productContentText;
+        return classToClass(productContentText);
     }
 }
 
