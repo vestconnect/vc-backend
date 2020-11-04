@@ -16,6 +16,9 @@ import HandlebarsMailTemplateProvider from './MailTemplateProvider/implementatio
 import ICacheProvider from './CacheProvider/models/ICacheProvider';
 import RedisCacheProvider from './CacheProvider/implementations/RedisCacheProvider';
 
+import IOneSignalProvider from './OneSignal/models/IOneSignalProvider';
+import OneSignalProvider from './OneSignal/implementations/OneSignalProvider';
+
 container.registerSingleton<IStorageProvider>(
     'StorageProvider',
     uploadConfig.driver === 'disk'
@@ -38,4 +41,9 @@ container.registerInstance<IMailProvider>(
 container.registerSingleton<ICacheProvider>(
     'CacheProvider',
     RedisCacheProvider
+);
+
+container.registerSingleton<IOneSignalProvider>(
+    'OneSignalProvider',
+    OneSignalProvider
 );

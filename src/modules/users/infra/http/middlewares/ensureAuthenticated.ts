@@ -16,6 +16,10 @@ export default function ensureAuthenticated(request: Request, response: Response
         throw new AppError('Usuário não está autenticado', 401);
     }
 
+    if (!jwtConfig.jwt.secret) {
+        throw new AppError('JWT not defined', 401);
+    }
+
     const [, token] = authHeader.split(' ');
 
     try {
