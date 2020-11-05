@@ -13,7 +13,9 @@ class ProductsContentRepository implements IProductsContentRepository {
     }
 
     public async findById(id: string): Promise<ProductContent | undefined> {
-        const productContent = await this.ormRepository.findOne(id);
+        const productContent = await this.ormRepository.findOne(id, {
+            relations: ['product']
+        });
 
         return productContent;
     }
