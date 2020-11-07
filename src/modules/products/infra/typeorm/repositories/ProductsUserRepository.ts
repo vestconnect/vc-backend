@@ -11,21 +11,30 @@ class ProductsUserRepository implements IProductsUserRepository {
     }
 
     public async findById(id: string): Promise<ProductUser | undefined> {
-        const productUser = this.ormRepository.findOne(id);
+        const productUser = await this.ormRepository.findOne(id);
 
         return productUser;
     }
 
     public async findByProductId(product_id: string, user_id: string): Promise<ProductUser | undefined> {
-        const productUser = this.ormRepository.findOne({
+        const productUser = await this.ormRepository.findOne({
             where: { product_id, user_id }
         });
 
         return productUser;
     }
 
+    public async findUsersByProduct(product_id: string, relations: string[]): Promise<ProductUser[]> {
+        const productUser = await this.ormRepository.find({
+            where: { product_id },
+            relations
+        });
+
+        return productUser;
+    }
+
     public async findByUser(user_id: string, relations: string[]): Promise<ProductUser[]> {
-        const productUser = this.ormRepository.find({
+        const productUser = await this.ormRepository.find({
             where: { user_id },
             relations
         });

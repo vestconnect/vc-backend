@@ -31,6 +31,19 @@ class ProductContent {
     @JoinColumn({ name: 'product_id' })
     product: Product;
 
+    @Expose({ name: 'type_text' })
+    getTypeText(): string | null {
+        if (!this.type) {
+            return null;
+        }
+
+        if (this.type === 'P') {
+            return 'Fotos';
+        }
+
+        return 'Videos';
+    }
+
     @Expose({ name: 'background_url' })
     getBackgroundUrl(): string | null {
         if (!this.background) {

@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import 'dotenv/config';
 import 'express-async-errors';
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import AppError from '@shared/errors/AppError';
 import uploadConfig from '@config/upload';
 import routes from './routes';
@@ -12,12 +13,7 @@ import '@shared/container';
 const app = express();
 
 app.use(express.json());
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, GET, DELETE, OPTIONS');
-    next();
-});
+app.use(cors());
 app.use(rateLimiter);
 app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);

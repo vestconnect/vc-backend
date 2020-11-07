@@ -13,6 +13,17 @@ const productsContentRouter = Router();
 const productsContentController = new ProductsContentController();
 const productContentBackgroundController = new ProductContentBackgroundController();
 
+productsContentRouter.get('/:id', ensureAuthenticated, async (request, response) => {
+    const productsContentRepository = getRepository(ProductContent);
+    const product_id = request.params.id;
+
+    const productContent = await productsContentRepository.find({
+        where: { product_id }
+    });
+
+    response.json(classToClass(productContent));
+});
+
 productsContentRouter.get('/:id/:type', ensureAuthenticated, async (request, response) => {
     const productsContentRepository = getRepository(ProductContent);
     const product_id = request.params.id;

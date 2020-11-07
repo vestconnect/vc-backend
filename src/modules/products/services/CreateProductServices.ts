@@ -23,7 +23,7 @@ class CreateProductServices {
         const checkProductNfcExists = await this.productsRepository.findByNfc(dataProduct.nfc_id);
 
         if (checkProductNfcExists) {
-            throw new AppError('NFC já cadastrado!');
+            throw new AppError('NFC já cadastrado!', 401);
         }
 
         const product = await this.productsRepository.create(dataProduct);

@@ -25,7 +25,19 @@ productsRouter.get('/', ensureAuthenticated, async (request, response) => {
 
     response.json(classToClass(products));
 });
+productsRouter.get('/:id', ensureAuthenticated, async (request, response) => {
+    const productRepository = getRepository(Product);
+    const id = request.params.id;
+    const user_id = request.user.id
+
+    const products = await productRepository.findOne({
+        where: { id, user_id }
+    });
+
+    response.json(classToClass(products));
+});
 productsRouter.get('/:nfc', productsController.index);
+productsRouter.put('/', ensureAuthenticated, productsController.update);
 productsRouter.post('/', ensureAuthenticated, productsController.create);
 productsRouter.patch('/:id/avatar', ensureAuthenticated, upload.single('avatar'), productAvatarController.update);
 productsRouter.patch('/:id/background', ensureAuthenticated, upload.single('background'), productBackgroundController.update);

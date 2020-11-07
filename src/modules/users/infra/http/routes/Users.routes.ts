@@ -26,6 +26,15 @@ usersRouter.get('/', async (request, response) => {
     response.json(classToClass(users));
 });
 
+usersRouter.get('/:id', async (request, response) => {
+    const userRepository = getRepository(User);
+    const id = request.params.id;
+
+    const user = await userRepository.findOne({ id });
+
+    response.json(classToClass(user));
+});
+
 usersRouter.post('/', usersController.create);
 usersRouter.patch('/password', ensureAuthenticated, userPasswordController.update);
 usersRouter.patch('/avatar', ensureAuthenticated, upload.single('avatar'), userAvatarController.update);

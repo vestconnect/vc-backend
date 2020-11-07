@@ -3,6 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 import User from '@modules/users/infra/typeorm/entities/User';
 import uploadConfig from '@config/upload';
 import { Expose } from 'class-transformer';
+import { format } from 'date-fns';
 
 @Entity('products')
 class Product {
@@ -36,6 +37,15 @@ class Product {
     @OneToOne(() => User)
     @JoinColumn({ name: 'user_id' })
     user: User;
+
+    @Expose({ name: 'validate_br' })
+    getValidate(): string | null {
+        if (!this.validate) {
+            return null;
+        }
+
+        return format(this.validate, 'yyyy-MM-dd');
+    }
 
     @Expose({ name: 'avatar_url' })
     getAvatarUrl(): string | null {

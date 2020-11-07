@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import CreateProductUserServices from '@modules/products/services/CreateProductUserServices';
 import SelectProductUserServices from '@modules/products/services/SelectProductUserServices';
+import SelectUserProductsService from '@modules/products/services/SelectUserProductsService';
 import { container } from 'tsyringe';
 
 export default class ProductsUserController {
@@ -24,5 +25,14 @@ export default class ProductsUserController {
         const productsUser = await selectProductUserServices.execute(user_id);
 
         return response.json(productsUser);
+    }
+
+    public async show(request: Request, response: Response): Promise<Response> {
+        const selectUserProductService = container.resolve(SelectUserProductsService);
+        const product_id = request.params.id;
+
+        const users = await selectUserProductService.execute({ id: product_id });
+
+        return response.json(users);
     }
 }

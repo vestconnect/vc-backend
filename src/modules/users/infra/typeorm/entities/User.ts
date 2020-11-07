@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-
+import { format, parseISO } from 'date-fns';
 enum TypeUser {
     User,
     Brand,
@@ -24,6 +24,7 @@ class User {
     password: string;
 
     @Column('date')
+    @Exclude()
     birth: Date;
 
     @Column('varchar')
@@ -43,6 +44,24 @@ class User {
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @Expose({ name: 'birth_user' })
+    getBirthUser(): string | null {
+        if (!this.birth) {
+            return null;
+        }
+
+        return format(new Date(this.birth), 'yyyy-MM-dd');
+    }
+
+    @Expose({ name: 'created' })
+    getCreatedAt(): string | null {
+        if (!this.created_at) {
+            return null;
+        }
+
+        return format(this.created_at, 'yyyy-MM-dd');
+    }
 
     @Expose({ name: 'avatar_url' })
     getAvatarUrl(): string | null {
