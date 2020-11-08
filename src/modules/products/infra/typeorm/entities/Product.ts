@@ -34,6 +34,9 @@ class Product {
     @Column('uuid')
     user_id: string;
 
+    @Column('boolean')
+    active: boolean;
+
     @OneToOne(() => User)
     @JoinColumn({ name: 'user_id' })
     user: User;

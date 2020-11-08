@@ -10,6 +10,7 @@ interface IRequest {
     subtitle: string;
     validate: Date;
     description: string;
+    active: boolean;
 }
 
 @injectable()

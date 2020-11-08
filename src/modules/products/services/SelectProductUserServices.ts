@@ -17,6 +17,7 @@ interface IResponse {
         avatar_url: string;
         background_url: string;
         description: string;
+        active: boolean;
         user: {
             nickname: string;
             avatar_url: string;
@@ -43,6 +44,7 @@ class SelectProductUserServices {
     ) { }
 
     public async execute(user_id: string): Promise<object[]> {
+        await this.cacheProvider.invalidate(`productuser-list:${user_id}`);
         let responseProductUser = await this.cacheProvider.recover<IResponse[]>(`productuser-list:${user_id}`);
 
         if (!responseProductUser?.length) {
@@ -60,27 +62,34 @@ class SelectProductUserServices {
             const selectedProductsUserNotifications = await this.selectedProductsUserNotificationsRepository.findAlls(user_id, products);
 
             responseProductUser = productUser.map(product => {
-                return {
-                    id: product.id,
-                    product_id: product.product_id,
-                    product: {
-                        title: product.product.title,
-                        subtitle: product.product.subtitle,
-                        nfc_id: product.product.nfc_id,
-                        validate: product.product.validate,
-                        avatar_url: product.product.getAvatarUrl(),
-                        background_url: product.product.getBackgroundUrl(),
-                        description: product.product.description,
-                        user: {
-                            nickname: product.product.user.nickname,
-                            avatar_url: product.product.user.getAvatarUrl()
-                        }
-                    },
-                    tag: productTags.filter(tag => tag.product_id === product.product_id),
-                    content: productsUserNotifications,
-                    notification: selectedProductsUserNotifications.some(prd => prd.product_id === product.product_id)
-                } as IResponse;
+                if (product.product.active) {
+                    return {
+                        id: product.id,
+                        product_id: product.product_id,
+                        product: {
+                            title: product.product.title,
+                            subtitle: product.product.subtitle,
+                            nfc_id: product.product.nfc_id,
+                            validate: product.product.validate,
+                            avatar_url: product.product.getAvatarUrl(),
+                            background_url: product.product.getBackgroundUrl(),
+                            description: product.product.description,
+                            active: product.product.active,
+                            user: {
+                                nickname: product.product.user.nickname,
+                                avatar_url: product.product.user.getAvatarUrl()
+                            }
+                        },
+                        tag: productTags.filter(tag => tag.product_id === product.product_id),
+                        content: productsUserNotifications,
+                        notification: selectedProductsUserNotifications.some(prd => prd.product_id === product.product_id)
+                    } as IResponse;
+                }
+
+                return {} as IResponse;
             });
+
+            responseProductUser = responseProductUser.filter(value => Object.keys(value).length !== 0);
 
             await this.cacheProvider.save(`productuser-list:${user_id}`, responseProductUser);
         }

@@ -10,6 +10,7 @@ interface IRequest {
     subtitle: string;
     validate: Date;
     description: string;
+    active: boolean;
 }
 
 @injectable()
@@ -19,7 +20,7 @@ class UpdateProductServices {
         private productRepository: IProductsRepository
     ) { }
 
-    public async update({ id, nfc_id, title, subtitle, validate, description }: IRequest): Promise<Product> {
+    public async update({ id, nfc_id, title, subtitle, validate, description, active }: IRequest): Promise<Product> {
         const product = await this.productRepository.findById(id);
 
         if (!product) {
@@ -37,6 +38,7 @@ class UpdateProductServices {
         product.subtitle = subtitle;
         product.validate = validate;
         product.description = description;
+        product.active = active;
 
         await this.productRepository.save(product);
 

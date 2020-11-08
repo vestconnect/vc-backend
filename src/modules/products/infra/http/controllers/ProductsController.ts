@@ -15,7 +15,7 @@ export default class ProductsController {
     }
 
     public async update(request: Request, response: Response): Promise<Response> {
-        const { id, nfc_id, title, subtitle, validate, description } = request.body;
+        const { id, nfc_id, title, subtitle, validate, description, active } = request.body;
 
         const updateProduct = container.resolve(UpdateProductServices);
 
@@ -25,7 +25,8 @@ export default class ProductsController {
             title,
             subtitle,
             validate,
-            description
+            description,
+            active
         });
 
         return response.json(prd);
@@ -33,7 +34,7 @@ export default class ProductsController {
 
     public async create(request: Request, response: Response): Promise<Response> {
         const user_id = request.user.id;
-        const { nfc_id, title, subtitle, validate, description } = request.body;
+        const { nfc_id, title, subtitle, validate, description, active } = request.body;
 
         const createProductServices = container.resolve(CreateProductServices);
 
@@ -43,7 +44,8 @@ export default class ProductsController {
             title,
             subtitle,
             validate,
-            description
+            description,
+            active
         });
 
         return response.json(product);
