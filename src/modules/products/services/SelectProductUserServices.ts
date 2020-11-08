@@ -44,7 +44,6 @@ class SelectProductUserServices {
     ) { }
 
     public async execute(user_id: string): Promise<object[]> {
-        await this.cacheProvider.invalidate(`productuser-list:${user_id}`);
         let responseProductUser = await this.cacheProvider.recover<IResponse[]>(`productuser-list:${user_id}`);
 
         if (!responseProductUser?.length) {
