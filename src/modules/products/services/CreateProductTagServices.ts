@@ -22,7 +22,13 @@ class CreateProductTagServices {
         const product = await this.productsRepository.findById(product_id);
 
         if (!product) {
-            throw new AppError('Produto não encontrado.');
+            throw new AppError('Produto não encontrado.', 401);
+        }
+
+        const count = await this.productsTagsRepository.countByProduct(product_id);
+
+        if (count >= 3) {
+            throw new AppError('Só é possível inserir apenas 3 TAGS', 401);
         }
 
         const productTag = await this.productsTagsRepository.create({

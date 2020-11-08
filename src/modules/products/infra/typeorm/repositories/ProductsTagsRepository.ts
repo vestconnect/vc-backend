@@ -45,6 +45,18 @@ class ProductsTagsRepository implements IProductsTagsRepository {
     public async save(productTag: ProductTag): Promise<ProductTag> {
         return await this.ormRepository.save(productTag);
     }
+
+    public async delete(id: string): Promise<void> {
+        await this.ormRepository.delete({ id });
+    }
+
+    public async countByProduct(product_id: string): Promise<number> {
+        const count = await this.ormRepository.count({
+            where: { product_id }
+        });
+
+        return count;
+    }
 }
 
 export default ProductsTagsRepository;

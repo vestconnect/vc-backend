@@ -7,4 +7,6 @@ export default interface IProductsTagsRepository {
     findByProductIds(product_id: string[]): Promise<ProductTag[]>;
     create(dto: ICreateProductTag): Promise<ProductTag>;
     save(productTag: ProductTag): Promise<ProductTag>;
+    delete(id: string): Promise<void>;
+    countByProduct(product_id: string): Promise<number>;
 }

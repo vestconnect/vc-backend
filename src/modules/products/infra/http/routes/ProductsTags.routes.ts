@@ -18,5 +18,5 @@ productTagRouter.get('/:id', ensureAuthenticated, async (request, response) => {
     response.json(productTag);
 });
 productTagRouter.post('/', ensureAuthenticated, productsTagsController.execute);
-
+productTagRouter.delete('/:id', ensureAuthenticated, productsTagsController.delete);
 export default productTagRouter;
