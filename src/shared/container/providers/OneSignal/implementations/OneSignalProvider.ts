@@ -38,6 +38,8 @@ class OneSignalProvider implements IOneSignalProvider {
 
         request.write(JSON.stringify(message));
 
+        request.end();
+
         var message_ios = {
             app_id: process.env.APP_ID_ONESIGNAL_IOS,
             contents: { "en": dto.contents },
@@ -46,6 +48,7 @@ class OneSignalProvider implements IOneSignalProvider {
         };
 
         request.write(JSON.stringify(message_ios));
+
         request.end();
     }
 }
