@@ -21,6 +21,9 @@ import ProductsContentVideoRepository from '@modules/products/infra/typeorm/repo
 import IProductsTagsRepository from '@modules/products/repositories/IProductsTagsRepository';
 import ProductsTagsRepository from '@modules/products/infra/typeorm/repositories/ProductsTagsRepository';
 
+import IProductsTagsNfcRepository from '@modules/products/repositories/IProductsTagsNfcRepository';
+import ProductsTagsNfcRepository from '@modules/products/infra/typeorm/repositories/ProductsTagsNfcRepository';
+
 import IProductsUserRepository from '@modules/products/repositories/IProductsUserRepository';
 import ProductsUserRepository from '@modules/products/infra/typeorm/repositories/ProductsUserRepository';
 
@@ -38,6 +41,14 @@ import UsersTokenRepository from '@modules/users/infra/typeorm/repositories/User
 
 import IUsersTokenResetRepository from '@modules/users/repositories/IUsersTokenResetRepository';
 import UsersTokenResetRepository from '@modules/users/infra/typeorm/repositories/UsersTokenResetRepository';
+
+import IPasswordsRepository from '@modules/products/repositories/IPasswordsRepository';
+import PasswordsRepository from '@modules/products/infra/typeorm/repositories/PasswordsRepository';
+
+container.registerSingleton<IPasswordsRepository>(
+    'PasswordsRepository',
+    PasswordsRepository
+);
 
 container.registerSingleton<IProductsRepository>(
     'ProductsRepository',
@@ -67,6 +78,11 @@ container.registerSingleton<IProductsContentVideoRepository>(
 container.registerSingleton<IProductsTagsRepository>(
     'ProductsTagsRepository',
     ProductsTagsRepository
+);
+
+container.registerSingleton<IProductsTagsNfcRepository>(
+    'ProductsTagsNfcRepository',
+    ProductsTagsNfcRepository
 );
 
 container.registerSingleton<IProductsUserRepository>(

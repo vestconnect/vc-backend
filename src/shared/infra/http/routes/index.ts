@@ -10,7 +10,9 @@ import ProductsContentRouterPhotos from '@modules/products/infra/http/routes/Pro
 import ProductsContentRouterTexts from '@modules/products/infra/http/routes/ProductsContentTexts.routes';
 import ProductsContentRouterVideos from '@modules/products/infra/http/routes/ProductsContentVideos.routes';
 import ProductsTagsRouter from '@modules/products/infra/http/routes/ProductsTags.routes';
+import ProductsTagsNfcRouter from '@modules/products/infra/http/routes/ProductsTagsNfc.routes';
 import ProductsUserRouter from '@modules/products/infra/http/routes/ProductsUser.routes';
+import PasswordsRouter from '@modules/products/infra/http/routes/Passwords.routes';
 
 const routes = Router();
 
@@ -23,7 +25,9 @@ routes.use('/productscontentphotos', ProductsContentRouterPhotos);
 routes.use('/productscontenttexts', ProductsContentRouterTexts);
 routes.use('/productscontentvideos', ProductsContentRouterVideos);
 routes.use('/productstags', ProductsTagsRouter);
+routes.use('/productstagsnfc', ProductsTagsNfcRouter);
 routes.use('/productsuser', ProductsUserRouter);
 routes.use('/password', UserTokenResetRouter);
+routes.use('/passwords', PasswordsRouter);
 
 export default routes;
