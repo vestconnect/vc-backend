@@ -11,6 +11,12 @@ class UsersTokenRepository implements IUsersTokenRepository {
         this.ormRepository = getRepository(UserToken);
     }
 
+    public async find(): Promise<UserToken[]> {
+        const userToken = await this.ormRepository.find();
+
+        return userToken;
+    }
+
     public async findById(id: string): Promise<UserToken | undefined> {
         const userToken = await this.ormRepository.findOne(id);
 
@@ -20,6 +26,14 @@ class UsersTokenRepository implements IUsersTokenRepository {
     public async findByToken(token: string): Promise<UserToken | undefined> {
         const userToken = await this.ormRepository.findOne({
             where: { token }
+        });
+
+        return userToken;
+    }
+
+    public async findByUserId(user_id: string): Promise<UserToken[]> {
+        const userToken = await this.ormRepository.find({
+            where: { user_id }
         });
 
         return userToken;

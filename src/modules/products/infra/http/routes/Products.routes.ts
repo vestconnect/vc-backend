@@ -7,6 +7,7 @@ import uploadConfig from '@config/upload';
 import ProductsController from '../controllers/ProductsController';
 import ProductAvatarController from '../controllers/ProductAvatarController';
 import ProductBackgroundController from '../controllers/ProductBackgroundController';
+import ProductNotificationController from '../controllers/ProductNotificationController';
 import { classToClass } from 'class-transformer';
 
 const productsRouter = Router();
@@ -14,6 +15,7 @@ const upload = multer(uploadConfig.multer);
 const productsController = new ProductsController();
 const productAvatarController = new ProductAvatarController();
 const productBackgroundController = new ProductBackgroundController();
+const productNotificationController = new ProductNotificationController();
 
 productsRouter.get('/', ensureAuthenticated, async (request, response) => {
     const productRepository = getRepository(Product);
@@ -39,6 +41,7 @@ productsRouter.get('/:id', ensureAuthenticated, async (request, response) => {
 productsRouter.get('/:nfc', productsController.index);
 productsRouter.put('/', ensureAuthenticated, productsController.update);
 productsRouter.post('/', ensureAuthenticated, productsController.create);
+productsRouter.post('/notification', ensureAuthenticated, productNotificationController.create);
 productsRouter.patch('/:id/avatar', ensureAuthenticated, upload.single('avatar'), productAvatarController.update);
 productsRouter.patch('/:id/background', ensureAuthenticated, upload.single('background'), productBackgroundController.update);
 
