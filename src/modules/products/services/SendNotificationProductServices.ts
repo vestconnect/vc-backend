@@ -55,6 +55,12 @@ class SendNotificationProductServices {
             contents: message,
             players_id: tokens
         });
+
+        this.oneSignal.sendNotificationIos({
+            headings: 'Vest Connect',
+            contents: message,
+            players_id: tokens
+        });
     }
 }
 
