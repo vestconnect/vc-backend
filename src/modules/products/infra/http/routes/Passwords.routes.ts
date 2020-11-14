@@ -2,7 +2,7 @@ import { Router } from 'express';
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import PasswordsController from '../controllers/PasswordsController';
 import multer from 'multer';
-import uploadConfig from '@config/upload';
+import uploadConfig from '@config/uploadXls';
 
 const passwordRouter = Router();
 const upload = multer(uploadConfig.multer);

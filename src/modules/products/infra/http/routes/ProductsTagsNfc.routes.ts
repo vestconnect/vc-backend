@@ -2,7 +2,7 @@ import { Router } from 'express';
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import ProductsTagsNfcController from '../controllers/ProductsTagsNfcController';
 import multer from 'multer';
-import uploadConfig from '@config/upload';
+import uploadConfig from '@config/uploadXls';
 
 const productTagRouter = Router();
 const upload = multer(uploadConfig.multer);
