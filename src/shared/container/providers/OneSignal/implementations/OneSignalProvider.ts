@@ -39,17 +39,6 @@ class OneSignalProvider implements IOneSignalProvider {
         request.write(JSON.stringify(message));
 
         request.end();
-
-        var message_ios = {
-            app_id: process.env.APP_ID_ONESIGNAL_IOS,
-            contents: { "en": dto.contents },
-            headings: { "en": dto.headings },
-            include_player_ids: dto.players_id
-        };
-
-        request.write(JSON.stringify(message_ios));
-
-        request.end();
     }
 
     public sendNotificationIos(dto: ISendNotificationDTO): void {
