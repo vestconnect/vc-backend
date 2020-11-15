@@ -12,5 +12,6 @@ passwordRouter.get('/', ensureAuthenticated, passwordsController.index);
 passwordRouter.post('/', ensureAuthenticated, upload.single('file'), passwordsController.execute);
 passwordRouter.patch('/inactive/all', ensureAuthenticated, passwordsController.inactive);
 passwordRouter.patch('/inactive/:id', ensureAuthenticated, passwordsController.inactive);
+passwordRouter.patch('/inactive/:id/pass', passwordsController.inactivePass);
 
 export default passwordRouter;

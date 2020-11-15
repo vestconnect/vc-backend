@@ -38,7 +38,7 @@ productsRouter.get('/:id', ensureAuthenticated, async (request, response) => {
 
     response.json(classToClass(products));
 });
-productsRouter.get('/:nfc', productsController.index);
+productsRouter.get('/:nfc/nfc', productsController.index);
 productsRouter.put('/', ensureAuthenticated, productsController.update);
 productsRouter.post('/', ensureAuthenticated, productsController.create);
 productsRouter.post('/notification', ensureAuthenticated, productNotificationController.create);

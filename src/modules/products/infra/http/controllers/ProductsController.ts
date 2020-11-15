@@ -9,9 +9,9 @@ export default class ProductsController {
         const nfc_id = request.params.nfc;
         const checkExistsProduct = container.resolve(CheckExistsProduct);
 
-        const exists = await checkExistsProduct.execute({ nfc_id });
+        const product = await checkExistsProduct.execute({ nfc_id });
 
-        return response.json({ exists });
+        return response.json(product);
     }
 
     public async update(request: Request, response: Response): Promise<Response> {

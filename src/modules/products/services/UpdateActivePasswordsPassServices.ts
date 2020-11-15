@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import IPasswordsRepository from '../repositories/IPasswordsRepository';
 import Password from '../infra/typeorm/entities/Password';
+import AppError from '@shared/errors/AppError';
 
 @injectable()
 class UpdateActivePasswordsServices {
@@ -9,16 +10,18 @@ class UpdateActivePasswordsServices {
         private passwordsRepository: IPasswordsRepository
     ) { }
 
-    public async execute(id: string, user_id: string): Promise<Password | Password[]> {
-        let password;
+    public async execute(id: string): Promise<Password> {
+        const pass = await this.passwordsRepository.findByPass(id);
 
-        if (id) {
-            password = await this.passwordsRepository.inactivePassword(id);
-
-            return password;
+        if (!pass) {
+            throw new AppError('Password inválido.', 400);
         }
 
-        password = await this.passwordsRepository.inactiveAll(user_id);
+        if (!pass.active) {
+            throw new AppError('Password já utilizado.', 400);
+        }
+
+        const password = await this.passwordsRepository.inactiveByPass(id);
 
         return password;
     }

@@ -18,6 +18,14 @@ class PasswordsRepository implements IPasswordsRepository {
         return passwords;
     }
 
+    public async findByPass(pass: string): Promise<Password | undefined> {
+        const password = await this.ormRepository.findOne({
+            where: { pass }
+        });
+
+        return password;
+    }
+
     public async findActivePasswords(user_id: string): Promise<Password[]> {
         const passwords = await this.ormRepository.find({
             where: { active: true, user_id }
@@ -43,6 +51,22 @@ class PasswordsRepository implements IPasswordsRepository {
 
     public async inactivePassword(id: string): Promise<Password> {
         const password = await this.ormRepository.findOne(id);
+
+        if (!password) {
+            throw new AppError('Password não encontrado', 400);
+        }
+
+        password.active = false;
+
+        await this.ormRepository.save(password);
+
+        return password;
+    }
+
+    public async inactiveByPass(pass: string): Promise<Password> {
+        const password = await this.ormRepository.findOne({
+            where: { pass }
+        });
 
         if (!password) {
             throw new AppError('Password não encontrado', 400);
