@@ -23,7 +23,7 @@ class CreateProductContentVideoServices {
         const productContent = await this.productsContentRepository.findById(content_id);
 
         if (!productContent) {
-            throw new AppError('Conteúdo não encontrado.')
+            throw new AppError('Conteúdo não encontrado.', 400);
         }
 
         const productContentVideo = await this.productsContentVideoRepository.create({

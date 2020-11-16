@@ -20,7 +20,7 @@ class PasswordsRepository implements IPasswordsRepository {
 
     public async findByPass(pass: string): Promise<Password | undefined> {
         const password = await this.ormRepository.findOne({
-            where: { pass }
+            where: { pass, active: true }
         });
 
         return password;
@@ -65,7 +65,7 @@ class PasswordsRepository implements IPasswordsRepository {
 
     public async inactiveByPass(pass: string): Promise<Password> {
         const password = await this.ormRepository.findOne({
-            where: { pass }
+            where: { pass, active: true }
         });
 
         if (!password) {

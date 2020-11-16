@@ -9,18 +9,14 @@ class UpdateActiveProductsTagsNfcServices {
         private productsTagsNfcRepository: IProductsTagsNfcRepository
     ) { }
 
-    public async execute(id: string): Promise<ProductTagNfc | ProductTagNfc[]> {
-        let productTag;
-
+    public async execute(id: string): Promise<void> {
         if (id) {
-            productTag = await this.productsTagsNfcRepository.inactiveTag(id);
+            await this.productsTagsNfcRepository.inactiveTag(id);
 
-            return productTag;
+            return;
         }
 
-        productTag = await this.productsTagsNfcRepository.inactiveAll();
-
-        return productTag;
+        await this.productsTagsNfcRepository.inactiveAll();
     }
 }
 

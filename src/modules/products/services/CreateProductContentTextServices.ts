@@ -23,7 +23,7 @@ class CreateProductContentTextServices {
         const productContent = await this.productsContentRepository.findById(content_id);
 
         if (!productContent) {
-            throw new AppError('Conteúdo não encontrado.')
+            throw new AppError('Conteúdo não encontrado.', 400);
         }
 
         const productContentText = await this.productsContentTextRepository.create({

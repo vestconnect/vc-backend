@@ -27,7 +27,7 @@ class UpdateProductServices {
         const product = await this.productRepository.findById(id);
 
         if (!product) {
-            throw new AppError('Produto não encontrado');
+            throw new AppError('Produto não encontrado', 400);
         }
 
         const existsNfc = await this.productRepository.findByNfc(nfc_id);

@@ -22,17 +22,17 @@ class ConfirmEmailUserServices {
         const userTokenReset = await this.usersTokenResetRepository.findByToken(token);        
 
         if (!userTokenReset) {
-            throw new AppError('Token inválido');
+            throw new AppError('Token inválido', 400);
         }
 
         const user = await this.usersRepository.findById(userTokenReset.user_id);
 
         if (!user) {
-            throw new AppError('Usuário não existe');
+            throw new AppError('Usuário não existe', 400);
         }
 
         if (user.email !== email) {
-            throw new AppError('E-mail inválido.');
+            throw new AppError('E-mail inválido.', 400);
         }
 
         const tokenCreatedAt = userTokenReset.created_at;

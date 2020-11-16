@@ -2,7 +2,7 @@ import { Repository, getRepository } from 'typeorm';
 import ProductTagNfc from '../entities/ProductTagNfc';
 import ICreateProductTagNfcDTO from '@modules/products/dtos/ICreateProductTagNfcDTO';
 import IProductsTagsNfcRepository from '@modules/products/repositories/IProductsTagsNfcRepository';
-import AppError from '@shared/errors/AppError';
+import isUUID from 'is-uuid';
 
 class ProductsTagsNfcRepository implements IProductsTagsNfcRepository {
     private ormRepository: Repository<ProductTagNfc>;
@@ -20,6 +20,14 @@ class ProductsTagsNfcRepository implements IProductsTagsNfcRepository {
     public async findActiveTags(): Promise<ProductTagNfc[]> {
         const productsTag = await this.ormRepository.find({
             where: { active: true }
+        });
+
+        return productsTag;
+    }
+
+    public async findByTag(tag_nfc: string): Promise<ProductTagNfc | undefined> {
+        const productsTag = await this.ormRepository.findOne({
+            where: { tag_nfc }
         });
 
         return productsTag;
@@ -45,18 +53,26 @@ class ProductsTagsNfcRepository implements IProductsTagsNfcRepository {
         return await this.ormRepository.save(productTagNfc);
     }
 
-    public async inactiveTag(id: string): Promise<ProductTagNfc> {
-        const productTagNfc = await this.ormRepository.findOne(id);
+    public async inactiveTag(id: string): Promise<void> {
+        let productTagNfc;
+
+        if (isUUID.anyNonNil(id)) {
+            productTagNfc = await this.ormRepository.findOne({
+                where: { id }
+            });
+        }
 
         if (!productTagNfc) {
-            throw new AppError('Tag não encontrada', 400);
+            productTagNfc = await this.ormRepository.findOne({
+                where: { tag_nfc: id }
+            });
+
+            if (!productTagNfc) return;
         }
 
         productTagNfc.active = false;
 
         await this.ormRepository.save(productTagNfc);
-
-        return productTagNfc;
     }
 
     public async inactiveAll(): Promise<ProductTagNfc[]> {

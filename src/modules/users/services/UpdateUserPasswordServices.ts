@@ -24,7 +24,7 @@ class CreateUserServices {
         const user = await this.usersRepository.findById(id);
 
         if (!user) {
-            throw new AppError('Usuário inválido');
+            throw new AppError('Usuário inválido', 400);
         }
 
         if (password) {
