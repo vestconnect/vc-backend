@@ -9,11 +9,11 @@ export default class UsersTokenController {
         const id = request.user.id;
         const { token } = request.body;
 
-        const userToken = await createUserTokenServices.execute({
+        await createUserTokenServices.execute({
             id,
             token
         });
 
-        return response.json(userToken);
+        return response.status(204).json();
     }
 }

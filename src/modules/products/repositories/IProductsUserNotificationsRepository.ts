@@ -8,5 +8,6 @@ export default interface IProductsUserNotificationsRepository {
     create(dto: ICreateProductUserNotificationDTO): Promise<ProductUserNotification>;
     save(productUserNotification: ProductUserNotification): Promise<ProductUserNotification>;
     countNotReadNotifications(dto: ICountNotReadProductUserNotificationsDTO): Promise<number>;
-    countNotReadNotificationsByUser(user_id: string): Promise<number>;
+    countNotReadNotificationsByUser(user_id: string): Promise<ProductUserNotification[]>;
+    readAllNotification(user_id: string): Promise<void>;
 }

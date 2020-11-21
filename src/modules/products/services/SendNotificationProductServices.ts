@@ -4,6 +4,7 @@ import IProductsRepository from '../repositories/IProductsRepository';
 import AppError from '@shared/errors/AppError';
 import IProductsUserRepository from '../repositories/IProductsUserRepository';
 import IUsersTokenRepository from '@modules/users/repositories/IUsersTokenRepository';
+import IProductsUserNotificationsRepository from '../repositories/IProductsUserNotificationsRepository';
 
 interface IRequest {
     product_id: string;
@@ -20,7 +21,9 @@ class SendNotificationProductServices {
         @inject('ProductsUserRepository')
         private productsUserRepository: IProductsUserRepository,
         @inject('UsersTokenRepository')
-        private usersTokenRepository: IUsersTokenRepository
+        private usersTokenRepository: IUsersTokenRepository,
+        @inject('ProductsUserNotificationsRepository')
+        private productsUserNotificationsRepository: IProductsUserNotificationsRepository
     ) { }
 
     public async execute({ product_id, message }: IRequest): Promise<void> {
@@ -40,6 +43,13 @@ class SendNotificationProductServices {
 
                 userTokens.forEach(userToken => {
                     tokens.push(userToken.token);
+                });
+            }
+
+            for (const users of productsUser) {
+                await this.productsUserNotificationsRepository.create({
+                    product_id,
+                    user_id: users.user_id
                 });
             }
         } else {

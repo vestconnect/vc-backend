@@ -49,6 +49,10 @@ class CreateProductUserServices {
             }
         };
 
+        if (!product.active) {
+            throw new AppError('Produto inativo', 401);
+        }
+
         const existsProduct = await this.productsUserRepository.findByProductId(product.id, user_id);
 
         if (existsProduct) {

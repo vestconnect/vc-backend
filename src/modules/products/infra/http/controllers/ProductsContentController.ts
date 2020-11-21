@@ -1,8 +1,24 @@
 import { Request, Response } from 'express';
+import SelectProductContentServices from '@modules/products/services/SelectProductContentServices';
 import CreateProductContentServices from '@modules/products/services/CreateProductContentServices';
 import { container } from 'tsyringe';
 
 export default class ProductsContentController {
+    public async index(request: Request, response: Response): Promise<Response> {
+        const selectProductContentServices = container.resolve(SelectProductContentServices);
+        const user_id = request.user.id;
+        const product_id = request.params.id;
+        const type = request.params.type;
+
+        const productsContent = await selectProductContentServices.execute({
+            product_id,
+            type,
+            user_id
+        });
+
+        return response.json(productsContent);
+    }
+
     public async create(request: Request, response: Response): Promise<Response> {
         const { description, type, product_id } = request.body;
 

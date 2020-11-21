@@ -18,7 +18,7 @@ class CreateUserTokenServices {
         private usersRepository: IUsersRepository
     ) { }
 
-    public async execute({ id, token }: RequestUserToken): Promise<UserToken> {
+    public async execute({ id, token }: RequestUserToken): Promise<void> {
         const user = await this.usersRepository.findById(id);
 
         if (!user) {
@@ -29,12 +29,14 @@ class CreateUserTokenServices {
             throw new AppError('Token inválido', 401);
         }
 
-        const userToken = await this.usersTokenRepository.create({
-            token,
-            user_id: id
-        });
+        const userToken = await this.usersTokenRepository.findByToken(token);
 
-        return userToken;
+        if (!userToken || userToken.user_id !== id) {
+            await this.usersTokenRepository.create({
+                token,
+                user_id: id
+            });
+        }
     }
 }
 

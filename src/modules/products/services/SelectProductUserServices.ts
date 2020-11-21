@@ -64,6 +64,10 @@ class SelectProductUserServices {
 
             responseProductUser = productUser.map(product => {
                 if (product.product.active) {
+                    const countContent = productsUserNotifications.filter(productNotification => {
+                        return productNotification.product_id === product.product_id
+                    });
+
                     return {
                         id: product.id,
                         product_id: product.product_id,
@@ -82,7 +86,7 @@ class SelectProductUserServices {
                             }
                         },
                         tag: productTags.filter(tag => tag.product_id === product.product_id),
-                        content: productsUserNotifications,
+                        content: countContent.length,
                         notification: selectedProductsUserNotifications.some(prd => prd.product_id === product.product_id)
                     } as IResponse;
                 }

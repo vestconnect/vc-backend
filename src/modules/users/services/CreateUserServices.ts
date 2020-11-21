@@ -7,6 +7,7 @@ import IMailProvider from '@shared/container/providers/MailProvider/models/IMail
 import IUsersTokenResetRepository from '../repositories/IUsersTokenResetRepository';
 import { classToClass } from 'class-transformer';
 import path from 'path';
+import { parseISO } from 'date-fns';
 
 enum TypeUser {
     User,
@@ -18,7 +19,7 @@ interface IRequestCreateUser {
     name: string;
     email: string;
     password: string;
-    birth: Date;
+    birth: string;
     type: TypeUser;
     nickname: string;
 }
@@ -47,12 +48,16 @@ class CreateUserServices {
         }
 
         const hashedPassword = await this.hashProvider.generateHash(password);
+        const splitBirth = birth.split('/');
+        const month = Number(splitBirth[1]) - 1;
+        const stringMonth = String(month).padStart(2, '0');
+        const parsedBirth = parseISO(`${splitBirth[2]}-${stringMonth}-${splitBirth[0]}T00:00:00`);
 
         const user = await this.usersRepository.create({
             name,
             email,
             password: hashedPassword,
-            birth,
+            birth: parsedBirth,
             type,
             nickname
         });

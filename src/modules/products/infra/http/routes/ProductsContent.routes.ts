@@ -24,18 +24,7 @@ productsContentRouter.get('/:id', ensureAuthenticated, async (request, response)
     response.json(classToClass(productContent));
 });
 
-productsContentRouter.get('/:id/:type', ensureAuthenticated, async (request, response) => {
-    const productsContentRepository = getRepository(ProductContent);
-    const product_id = request.params.id;
-    const type = request.params.type;
-
-    const productContent = await productsContentRepository.find({
-        where: { product_id, type }
-    });
-
-    response.json(classToClass(productContent));
-});
-
+productsContentRouter.get('/:id/:type', ensureAuthenticated, productsContentController.index);
 productsContentRouter.post('/', ensureAuthenticated, productsContentController.create);
 productsContentRouter.patch('/:id/background', ensureAuthenticated, upload.single('background'), productContentBackgroundController.update);
 

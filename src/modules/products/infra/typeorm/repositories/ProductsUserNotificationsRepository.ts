@@ -43,10 +43,22 @@ class ProductsUserNotificationsRepository implements IProductsUserNotificationsR
         });
     }
 
-    public async countNotReadNotificationsByUser(user_id: string): Promise<number> {
-        return await this.ormRepository.count({
+    public async countNotReadNotificationsByUser(user_id: string): Promise<ProductUserNotification[]> {
+        return await this.ormRepository.find({
             where: { read: false, user_id }
         });
+    }
+
+    public async readAllNotification(user_id: string): Promise<void> {
+        const notifications = await this.ormRepository.find({
+            where: { user_id, read: false }
+        });
+
+        notifications.forEach(notification => {
+            notification.read = true;
+        });
+
+        await this.ormRepository.save(notifications);
     }
 }
 
