@@ -5,6 +5,7 @@ import AppError from '@shared/errors/AppError';
 import IProductsUserRepository from '../repositories/IProductsUserRepository';
 import IUsersTokenRepository from '@modules/users/repositories/IUsersTokenRepository';
 import IProductsUserNotificationsRepository from '../repositories/IProductsUserNotificationsRepository';
+import ISelectedProductsUserNotificationsRepository from '../repositories/ISelectedProductsUserNotificationsRepository';
 
 interface IRequest {
     product_id: string;
@@ -23,7 +24,9 @@ class SendNotificationProductServices {
         @inject('UsersTokenRepository')
         private usersTokenRepository: IUsersTokenRepository,
         @inject('ProductsUserNotificationsRepository')
-        private productsUserNotificationsRepository: IProductsUserNotificationsRepository
+        private productsUserNotificationsRepository: IProductsUserNotificationsRepository,
+        @inject('SelectedProductsUserNotificationsRepository')
+        private selectedProductsUserNotificationsRepository: ISelectedProductsUserNotificationsRepository
     ) { }
 
     public async execute({ product_id, message }: IRequest): Promise<void> {
