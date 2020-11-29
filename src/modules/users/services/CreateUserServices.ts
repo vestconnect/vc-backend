@@ -49,7 +49,7 @@ class CreateUserServices {
 
         const hashedPassword = await this.hashProvider.generateHash(password);
         const splitBirth = birth.split('/');
-        const month = Number(splitBirth[1]) - 1;
+        const month = Number(splitBirth[1]);
         const stringMonth = String(month).padStart(2, '0');
         const parsedBirth = parseISO(`${splitBirth[2]}-${stringMonth}-${splitBirth[0]}T00:00:00`);
 

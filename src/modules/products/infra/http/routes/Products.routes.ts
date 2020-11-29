@@ -27,6 +27,16 @@ productsRouter.get('/', ensureAuthenticated, async (request, response) => {
 
     response.json(classToClass(products));
 });
+productsRouter.get('/:id/products', ensureAuthenticated, async (request, response) => {
+    const productRepository = getRepository(Product);
+    const id = request.params.id
+
+    const products = await productRepository.find({
+        where: { user_id: id }
+    });
+
+    response.json(classToClass(products));
+});
 productsRouter.get('/:id', ensureAuthenticated, async (request, response) => {
     const productRepository = getRepository(Product);
     const id = request.params.id;

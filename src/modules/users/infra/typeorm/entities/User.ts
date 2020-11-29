@@ -1,10 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { format, getDate, getMonth } from 'date-fns';
-enum TypeUser {
-    User,
-    Brand,
-    Admin
-}
+import { format } from 'date-fns';
 import uploadConfig from '@config/upload';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -31,7 +26,7 @@ class User {
     avatar: string;
 
     @Column('varchar')
-    type: TypeUser
+    type: string;
 
     @Column('varchar')
     nickname: string;

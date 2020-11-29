@@ -13,4 +13,16 @@ export default class UserAvatarController {
 
         return response.json(user);
     }
+
+    public async updateProvider(request: Request, response: Response): Promise<Response> {
+        const updateUserAvatarServices = container.resolve(UpdateUserAvatarServices);
+        const id = request.params.id;
+
+        const user = await updateUserAvatarServices.execute({
+            id,
+            avatar: request.file.filename
+        });
+
+        return response.json(user);
+    }
 }

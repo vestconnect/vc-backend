@@ -32,23 +32,23 @@ class AuthenticateUserServices {
         const user = await this.usersRepository.findByEmail(email);
 
         if (!user) {
-            throw new AppError('E-mail ou senha incorreto', 200);
+            throw new AppError('E-mail ou senha incorreto', 400);
         }
 
         const passwordMatched = await this.hashProvider.compareHash(password, user.password);
 
         if (!passwordMatched) {
-            throw new AppError('E-mail ou senha incorreto!', 200);
+            throw new AppError('E-mail ou senha incorreto!', 400);
         }
 
         if (!user.confirm_email) {
-            throw new AppError('E-mail não confirmado!', 200);
+            throw new AppError('E-mail não confirmado!', 400);
         }
 
         const { secret, expiresIn } = jwtConfig.jwt;
 
         if (!secret) {
-            throw new AppError('Secret JWT não definido!', 200);
+            throw new AppError('Secret JWT não definido!', 400);
         }
 
         const token = sign({}, secret, {
