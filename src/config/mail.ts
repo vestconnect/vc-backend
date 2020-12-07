@@ -12,7 +12,7 @@ export default {
     driver: process.env.MAIL_DRIVER || 'ethereal',
     defaults: {
         from: {
-            email: 'jcpaesf@gmail.com',
+            email: 'contato@vestconnect.com.br',
             name: 'Equipe VestConnect'
         }
     }

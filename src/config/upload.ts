@@ -39,7 +39,7 @@ export default {
     config: {
         disk: {},
         aws: {
-            bucket: 'app-vestconnect'
+            bucket: 's3-vestconnect'
         }
     }
 } as IUploadConfig;
