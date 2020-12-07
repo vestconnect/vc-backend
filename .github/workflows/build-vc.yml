@@ -46,4 +46,4 @@ jobs:
             cd ~/app/vc-backend/
             yarn
             ./node_modules/.bin/typeorm migration:run
-            pm2 restart vc-api
+            pm2 restart server
