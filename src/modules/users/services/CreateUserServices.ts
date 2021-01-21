@@ -9,18 +9,12 @@ import { classToClass } from 'class-transformer';
 import path from 'path';
 import { parseISO } from 'date-fns';
 
-enum TypeUser {
-    User,
-    Brand,
-    Admin
-}
-
 interface IRequestCreateUser {
     name: string;
     email: string;
     password: string;
-    birth: string;
-    type: TypeUser;
+    birth?: string;
+    type: string;
     nickname: string;
 }
 
@@ -48,19 +42,25 @@ class CreateUserServices {
         }
 
         const hashedPassword = await this.hashProvider.generateHash(password);
-        const splitBirth = birth.split('/');
-        const month = Number(splitBirth[1]);
-        const stringMonth = String(month).padStart(2, '0');
-        const parsedBirth = parseISO(`${splitBirth[2]}-${stringMonth}-${splitBirth[0]}T00:00:00`);
 
         const user = await this.usersRepository.create({
             name,
             email,
             password: hashedPassword,
-            birth: parsedBirth,
             type,
             nickname
         });
+
+        if (birth) {
+            const splitBirth = birth.split('/');
+            const month = Number(splitBirth[1]);
+            const stringMonth = String(month).padStart(2, '0');
+            const parsedBirth = parseISO(`${splitBirth[2]}-${stringMonth}-${splitBirth[0]}T00:00:00`);
+
+            user.birth = parsedBirth;
+
+            await this.usersRepository.save(user);
+        }
 
         const confirmEmailTemplate = path.resolve(__dirname, '..', 'views', 'confirm_email.hbs');
         const userTokenReset = await this.usersTokenResetRepository.generate(user.id);
