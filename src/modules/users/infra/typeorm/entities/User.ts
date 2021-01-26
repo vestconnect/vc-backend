@@ -26,6 +26,9 @@ class User {
     avatar: string;
 
     @Column('varchar')
+    background: string;
+
+    @Column('varchar')
     type: string;
 
     @Column('varchar')
@@ -69,6 +72,22 @@ class User {
                 return `${process.env.APP_API_URL}/files/${this.avatar}`
             case 's3':
                 return `https://${uploadConfig.config.aws.bucket}.s3.us-east-2.amazonaws.com/${this.avatar}`
+            default:
+                return null;
+        }
+    }
+
+    @Expose({ name: 'background_url' })
+    getBackgroundUrl(): string | null {
+        if (!this.background) {
+            return null;
+        }
+
+        switch (uploadConfig.driver) {
+            case 'disk':
+                return `${process.env.APP_API_URL}/files/${this.background}`
+            case 's3':
+                return `https://${uploadConfig.config.aws.bucket}.s3.us-east-2.amazonaws.com/${this.background}`
             default:
                 return null;
         }
