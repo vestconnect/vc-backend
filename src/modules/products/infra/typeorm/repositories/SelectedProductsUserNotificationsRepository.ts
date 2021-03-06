@@ -1,71 +1,96 @@
-import { Repository, getRepository, In } from 'typeorm';
-import SelectedProductUserNotification from '../entities/SelectedProductUserNotification';
-import ICreateSelectedProductUserNotificationDTO from '@modules/products/dtos/ICreateSelectedProductUserNotificationDTO';
-import IFindAllSelectedProductUserNotificationDTO from '@modules/products/dtos/IFindAllSelectedProductUserNotificationDTO';
-import ISelectedProductsUserNotificationsRepository from '@modules/products/repositories/ISelectedProductsUserNotificationsRepository';
+import { Repository, getRepository, In } from "typeorm";
+import SelectedProductUserNotification from "../entities/SelectedProductUserNotification";
+import ICreateSelectedProductUserNotificationDTO from "@modules/products/dtos/ICreateSelectedProductUserNotificationDTO";
+import IFindAllSelectedProductUserNotificationDTO from "@modules/products/dtos/IFindAllSelectedProductUserNotificationDTO";
+import ISelectedProductsUserNotificationsRepository from "@modules/products/repositories/ISelectedProductsUserNotificationsRepository";
 
-class SelectedProductsUserNotificationsRepository implements ISelectedProductsUserNotificationsRepository {
-    private ormRepository: Repository<SelectedProductUserNotification>
+class SelectedProductsUserNotificationsRepository
+  implements ISelectedProductsUserNotificationsRepository {
+  private ormRepository: Repository<SelectedProductUserNotification>;
 
-    constructor() {
-        this.ormRepository = getRepository(SelectedProductUserNotification);
-    }
+  constructor() {
+    this.ormRepository = getRepository(SelectedProductUserNotification);
+  }
 
-    public async findById(id: string): Promise<SelectedProductUserNotification | undefined> {
-        const selectedProductUserNotification = await this.ormRepository.findOne(id);
+  public async findById(
+    id: string
+  ): Promise<SelectedProductUserNotification | undefined> {
+    const selectedProductUserNotification = await this.ormRepository.findOne(
+      id
+    );
 
-        return selectedProductUserNotification;
-    }
+    return selectedProductUserNotification;
+  }
 
-    public async findByProduct(product_id: string): Promise<SelectedProductUserNotification | undefined> {
-        const selectedProductUserNotification = await this.ormRepository.findOne({
-            where: { product_id }
-        });
+  public async findByProduct(
+    product_id: string
+  ): Promise<SelectedProductUserNotification | undefined> {
+    const selectedProductUserNotification = await this.ormRepository.findOne({
+      where: { product_id },
+    });
 
-        return selectedProductUserNotification;
-    }
+    return selectedProductUserNotification;
+  }
 
-    public async findByUser(user_id: string): Promise<SelectedProductUserNotification | undefined> {
-        const selectedProductUserNotification = await this.ormRepository.findOne({
-            where: { user_id }
-        });
+  public async findByUser(
+    user_id: string
+  ): Promise<SelectedProductUserNotification | undefined> {
+    const selectedProductUserNotification = await this.ormRepository.findOne({
+      where: { user_id },
+    });
 
-        return selectedProductUserNotification;
-    }
+    return selectedProductUserNotification;
+  }
 
-    public async findAll({ user_id, product_id }: IFindAllSelectedProductUserNotificationDTO): Promise<SelectedProductUserNotification[]> {
-        const selectedProductUserNotification = this.ormRepository.find({
-            where: {
-                user_id,
-                product_id
-            }
-        });
+  public async findAll({
+    user_id,
+    product_id,
+  }: IFindAllSelectedProductUserNotificationDTO): Promise<
+    SelectedProductUserNotification[]
+  > {
+    const selectedProductUserNotification = this.ormRepository.find({
+      where: {
+        user_id,
+        product_id,
+      },
+    });
 
-        return selectedProductUserNotification;
-    }
+    return selectedProductUserNotification;
+  }
 
-    public async findAlls(user_id: string, products: string[]): Promise<SelectedProductUserNotification[]> {
-        const selectedProductUserNotification = this.ormRepository.find({
-            where: {
-                user_id,
-                product_id: In(products)
-            }
-        });
+  public async findAlls(
+    user_id: string,
+    products: string[]
+  ): Promise<SelectedProductUserNotification[]> {
+    const selectedProductUserNotification = this.ormRepository.find({
+      where: {
+        user_id,
+        product_id: In(products),
+      },
+    });
 
-        return selectedProductUserNotification;
-    }
+    return selectedProductUserNotification;
+  }
 
-    public async create(dto: ICreateSelectedProductUserNotificationDTO): Promise<SelectedProductUserNotification> {
-        const selectedProductUserNotification = this.ormRepository.create(dto);
+  public async create(
+    dto: ICreateSelectedProductUserNotificationDTO
+  ): Promise<SelectedProductUserNotification> {
+    const selectedProductUserNotification = this.ormRepository.create(dto);
 
-        await this.ormRepository.save(selectedProductUserNotification);
+    await this.ormRepository.save(selectedProductUserNotification);
 
-        return selectedProductUserNotification;
-    }
+    return selectedProductUserNotification;
+  }
 
-    public async save(selectedProductUserNotification: SelectedProductUserNotification): Promise<SelectedProductUserNotification> {
-        return await this.ormRepository.save(selectedProductUserNotification);
-    }
+  public async save(
+    selectedProductUserNotification: SelectedProductUserNotification
+  ): Promise<SelectedProductUserNotification> {
+    return await this.ormRepository.save(selectedProductUserNotification);
+  }
+
+  public async deleteByProductId(product_id: string): Promise<void> {
+    await this.ormRepository.delete({ product_id });
+  }
 }
 
 export default SelectedProductsUserNotificationsRepository;

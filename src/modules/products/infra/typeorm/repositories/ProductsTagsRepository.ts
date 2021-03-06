@@ -1,62 +1,66 @@
-import { Repository, getRepository, In } from 'typeorm';
-import IProductsTagsRepository from '@modules/products/repositories/IProductsTagsRepository';
-import ICreateProductTagDTO from '@modules/products/dtos/ICreateProdutTagDTO';
-import ProductTag from '../entities/ProductTag';
+import { Repository, getRepository, In } from "typeorm";
+import IProductsTagsRepository from "@modules/products/repositories/IProductsTagsRepository";
+import ICreateProductTagDTO from "@modules/products/dtos/ICreateProdutTagDTO";
+import ProductTag from "../entities/ProductTag";
 
 class ProductsTagsRepository implements IProductsTagsRepository {
-    private ormRepository: Repository<ProductTag>;
+  private ormRepository: Repository<ProductTag>;
 
-    constructor() {
-        this.ormRepository = getRepository(ProductTag);
-    }
+  constructor() {
+    this.ormRepository = getRepository(ProductTag);
+  }
 
-    public async findById(id: string): Promise<ProductTag | undefined> {
-        const productTag = await this.ormRepository.findOne(id);
+  public async findById(id: string): Promise<ProductTag | undefined> {
+    const productTag = await this.ormRepository.findOne(id);
 
-        return productTag;
-    }
+    return productTag;
+  }
 
-    public async findByProduct(product_id: string): Promise<ProductTag[]> {
-        const productTag = await this.ormRepository.find({
-            where: {
-                product_id
-            }
-        });
+  public async findByProduct(product_id: string): Promise<ProductTag[]> {
+    const productTag = await this.ormRepository.find({
+      where: {
+        product_id,
+      },
+    });
 
-        return productTag;
-    }
+    return productTag;
+  }
 
-    public async findByProductIds(products: string[]): Promise<ProductTag[]> {
-        const productTag = await this.ormRepository.find({
-            where: { product_id: In(products) }
-        });
+  public async findByProductIds(products: string[]): Promise<ProductTag[]> {
+    const productTag = await this.ormRepository.find({
+      where: { product_id: In(products) },
+    });
 
-        return productTag;
-    }
+    return productTag;
+  }
 
-    public async create(dto: ICreateProductTagDTO): Promise<ProductTag> {
-        const productTag = this.ormRepository.create(dto);
+  public async create(dto: ICreateProductTagDTO): Promise<ProductTag> {
+    const productTag = this.ormRepository.create(dto);
 
-        await this.ormRepository.save(productTag);
+    await this.ormRepository.save(productTag);
 
-        return productTag;
-    }
+    return productTag;
+  }
 
-    public async save(productTag: ProductTag): Promise<ProductTag> {
-        return await this.ormRepository.save(productTag);
-    }
+  public async save(productTag: ProductTag): Promise<ProductTag> {
+    return await this.ormRepository.save(productTag);
+  }
 
-    public async delete(id: string): Promise<void> {
-        await this.ormRepository.delete({ id });
-    }
+  public async delete(id: string): Promise<void> {
+    await this.ormRepository.delete({ id });
+  }
 
-    public async countByProduct(product_id: string): Promise<number> {
-        const count = await this.ormRepository.count({
-            where: { product_id }
-        });
+  public async countByProduct(product_id: string): Promise<number> {
+    const count = await this.ormRepository.count({
+      where: { product_id },
+    });
 
-        return count;
-    }
+    return count;
+  }
+
+  public async deleteByProductId(product_id: string): Promise<void> {
+    await this.ormRepository.delete({ product_id });
+  }
 }
 
 export default ProductsTagsRepository;

@@ -1,8 +1,10 @@
-import ProductContentPhoto from '../infra/typeorm/entities/ProductContentPhoto';
-import ICreateProductContentPhotoDTO from '../dtos/ICreateProductContentPhotoDTO';
+import ProductContentPhoto from "../infra/typeorm/entities/ProductContentPhoto";
+import ICreateProductContentPhotoDTO from "../dtos/ICreateProductContentPhotoDTO";
 
 export default interface IProductsContentPhotoRepository {
-    findById(id: string): Promise<ProductContentPhoto | undefined>;
-    create(data: ICreateProductContentPhotoDTO): Promise<ProductContentPhoto>;
-    save(productContentPhoto: ProductContentPhoto): Promise<ProductContentPhoto>;
+  findById(id: string): Promise<ProductContentPhoto | undefined>;
+  create(data: ICreateProductContentPhotoDTO): Promise<ProductContentPhoto>;
+  save(productContentPhoto: ProductContentPhoto): Promise<ProductContentPhoto>;
+  delete(id: string): Promise<void>;
+  deleteByContentId(content_id: string): Promise<void>;
 }

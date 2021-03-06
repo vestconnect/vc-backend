@@ -1,19 +1,35 @@
-import { Request, Response } from 'express';
-import CreateProductContentPhotoServices from '@modules/products/services/CreateProductContentPhotoServices';
-import { container } from 'tsyringe';
+import { Request, Response } from "express";
+import CreateProductContentPhotoServices from "@modules/products/services/CreateProductContentPhotoServices";
+import { container } from "tsyringe";
+import DeleteProductContentPhotoServices from "@modules/products/services/DeleteProductContentPhotoServices";
 
 export default class ProductsContentPhotoController {
-    public async create(request: Request, response: Response): Promise<Response> {
-        const createProductContentPhotoServices = container.resolve(CreateProductContentPhotoServices);
+  public async create(request: Request, response: Response): Promise<Response> {
+    const createProductContentPhotoServices = container.resolve(
+      CreateProductContentPhotoServices
+    );
 
-        const { title, description, content_id } = request.body;
+    const { title, description, content_id } = request.body;
 
-        const productContentPhoto = await createProductContentPhotoServices.execute({
-            title,
-            description,
-            content_id
-        });
+    const productContentPhoto = await createProductContentPhotoServices.execute(
+      {
+        title,
+        description,
+        content_id,
+      }
+    );
 
-        return response.json(productContentPhoto);
-    }
+    return response.json(productContentPhoto);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const deleteProductContentPhotoServices = container.resolve(
+      DeleteProductContentPhotoServices
+    );
+    const id = request.params.id;
+
+    await deleteProductContentPhotoServices.execute(id);
+
+    return response.status(204).json();
+  }
 }
