@@ -1,27 +1,22 @@
-import { inject, injectable } from 'tsyringe';
-import IPasswordsRepository from '../repositories/IPasswordsRepository';
-import Password from '../infra/typeorm/entities/Password';
+import { inject, injectable } from "tsyringe";
+import IPasswordsRepository from "../repositories/IPasswordsRepository";
 
 @injectable()
 class UpdateActivePasswordsServices {
-    constructor(
-        @inject('PasswordsRepository')
-        private passwordsRepository: IPasswordsRepository
-    ) { }
+  constructor(
+    @inject("PasswordsRepository")
+    private passwordsRepository: IPasswordsRepository
+  ) {}
 
-    public async execute(id: string, user_id: string): Promise<Password | Password[]> {
-        let password;
+  public async execute(id: string, user_id: string): Promise<void> {
+    if (id) {
+      await this.passwordsRepository.inactivePassword(id);
 
-        if (id) {
-            password = await this.passwordsRepository.inactivePassword(id);
-
-            return password;
-        }
-
-        password = await this.passwordsRepository.inactiveAll(user_id);
-
-        return password;
+      return;
     }
+
+    await this.passwordsRepository.inactiveAll(user_id);
+  }
 }
 
 export default UpdateActivePasswordsServices;

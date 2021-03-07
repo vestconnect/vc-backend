@@ -4,6 +4,12 @@ import ICreateProductTagNfcDTO from "@modules/products/dtos/ICreateProductTagNfc
 import IProductsTagsNfcRepository from "@modules/products/repositories/IProductsTagsNfcRepository";
 import isUUID from "is-uuid";
 
+interface IResponseFindByProductId {
+  total: number;
+  total_pages: number;
+  productsTagNfc: ProductTagNfc[];
+}
+
 class ProductsTagsNfcRepository implements IProductsTagsNfcRepository {
   private ormRepository: Repository<ProductTagNfc>;
 
@@ -33,12 +39,23 @@ class ProductsTagsNfcRepository implements IProductsTagsNfcRepository {
     return productsTag;
   }
 
-  public async findByProductId(product_id: string): Promise<ProductTagNfc[]> {
-    const productsTag = await this.ormRepository.find({
+  public async findByProductId(
+    product_id: string,
+    page: number
+  ): Promise<IResponseFindByProductId> {
+    const skip = page > 1 ? (page - 1) * 10 : 0;
+
+    const [productsTagNfc, total] = await this.ormRepository.findAndCount({
       where: { product_id },
+      skip,
+      take: 10,
     });
 
-    return productsTag;
+    return {
+      total,
+      total_pages: Math.ceil(total / 10),
+      productsTagNfc,
+    };
   }
 
   public async create(dto: ICreateProductTagNfcDTO): Promise<ProductTagNfc> {
