@@ -11,6 +11,12 @@ class ProductsRepository implements IProductsRepository {
     this.ormRepository = getRepository(Product);
   }
 
+  public async count(): Promise<number> {
+    const products = await this.ormRepository.count();
+
+    return products;
+  }
+
   public async findById(id: string): Promise<Product | undefined> {
     const product = await this.ormRepository.findOne(id);
 

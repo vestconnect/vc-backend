@@ -12,6 +12,12 @@ class ProductsContentPhotoRepository
     this.ormRepository = getRepository(ProductContentPhoto);
   }
 
+  public async count(): Promise<number> {
+    const contentPhoto = await this.ormRepository.count();
+
+    return contentPhoto;
+  }
+
   public async findById(id: string): Promise<ProductContentPhoto | undefined> {
     const productContentPhoto = await this.ormRepository.findOne(id);
 

@@ -11,6 +11,22 @@ class UsersRepository implements IUsersRepository {
         this.ormRepository = getRepository(User);
     }
 
+    public async countUsers(): Promise<number> {
+        const users = await this.ormRepository.count({
+            where: { type: null }
+        });
+
+        return users;
+    }
+
+    public async countProviders(): Promise<number> {
+        const providers = await this.ormRepository.count({
+            where: { type: '1' }
+        });
+
+        return providers;
+    }
+
     public async find(): Promise<User[]> {
         const users = await this.ormRepository.find();
 

@@ -12,6 +12,12 @@ class ProductsContentVideoRepository
     this.ormRepository = getRepository(ProductContentVideo);
   }
 
+  public async count(): Promise<number> {
+    const contentVideo = await this.ormRepository.count();
+
+    return contentVideo;
+  }
+
   public async findById(id: string): Promise<ProductContentVideo | undefined> {
     const productContentVideo = await this.ormRepository.findOne(id);
 

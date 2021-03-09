@@ -3,6 +3,7 @@ import ICreateProductContentDTO from "../dtos/ICreateProductContentDTO";
 import IFindProductContentByType from "../dtos/IFindProductContentByType";
 
 export default interface IProductsContentRepository {
+  count(): Promise<number>;
   findById(id: string): Promise<ProductContent | undefined>;
   findContentByType(data: IFindProductContentByType): Promise<ProductContent[]>;
   findByProductId(product_id: string): Promise<ProductContent[]>;
