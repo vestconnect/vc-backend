@@ -24,6 +24,7 @@ const confirmEmailController = new ConfirmEmailController();
 const providersController = new ProvidersController();
 const userActiveController = new UserActiveController();
 
+usersRouter.get('/', ensureAuthenticated, providersController.indexOld);
 usersRouter.get('/providers', ensureAuthenticated, providersController.index);
 
 usersRouter.get('/:id', async (request, response) => {
