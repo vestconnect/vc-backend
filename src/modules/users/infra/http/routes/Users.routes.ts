@@ -22,7 +22,7 @@ const userBackgroundController = new UserBackgroundController();
 const confirmEmailController = new ConfirmEmailController();
 const providersController = new ProvidersController();
 
-usersRouter.get('/', ensureAuthenticated, providersController.index);
+usersRouter.get('/providers', ensureAuthenticated, providersController.index);
 
 usersRouter.get('/:id', async (request, response) => {
     const userRepository = getRepository(User);

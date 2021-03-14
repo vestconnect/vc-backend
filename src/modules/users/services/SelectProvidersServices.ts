@@ -6,7 +6,13 @@ import { classToClass } from 'class-transformer';
 
 interface IRequest {
     user_id: string;
-    type: string;
+    page: number;
+}
+
+interface IReturnUsers {
+    users: User[];
+    total: number;
+    total_pages: number;
 }
 
 @injectable()
@@ -16,7 +22,7 @@ class SelectProvidersServices {
         private usersRepository: IUsersRepository
     ) { }
 
-    public async execute({ user_id, type }: IRequest): Promise<User[]> {
+    public async execute({ user_id, page }: IRequest): Promise<IReturnUsers> {
         const user = await this.usersRepository.findById(user_id);
 
         if (!user) {
@@ -27,13 +33,7 @@ class SelectProvidersServices {
             throw new AppError('Usuário não é admin');
         }
 
-        let providers: User[];
-
-        if (type !== 'undefined') {
-            providers = await this.usersRepository.findByType(Number(type));
-        } else {
-            providers = await this.usersRepository.find();
-        }
+        const providers = await this.usersRepository.findProviders(page);
 
         return classToClass(providers);
     }

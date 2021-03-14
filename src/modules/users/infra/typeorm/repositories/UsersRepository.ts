@@ -4,6 +4,12 @@ import User from '../entities/User';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
+interface IReturnUsers {
+    users: User[];
+    total: number;
+    total_pages: number;
+}
+
 class UsersRepository implements IUsersRepository {
     private ormRepository: Repository<User>;
 
@@ -53,6 +59,22 @@ class UsersRepository implements IUsersRepository {
         });
 
         return users;
+    }
+
+    public async findProviders(page: number): Promise<IReturnUsers> {
+        const skip = page > 1 ? (page - 1) * 10 : 0;
+
+        const [providers, total] = await this.ormRepository.findAndCount({
+            where: { type: '1' },
+            skip,
+            take: 10
+        });
+
+        return {
+            users: providers,
+            total,
+            total_pages: Math.ceil(total / 10)
+        };
     }
 
     public async create(dataUser: ICreateUserDTO): Promise<User> {
