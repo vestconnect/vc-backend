@@ -5,7 +5,7 @@ import UpdateUserActiveServices from '@modules/users/services/UpdateUserActiveSe
 export default class UserActiveController {
   public async update(request: Request, response: Response): Promise<Response> {
     const updateUserActiveServices = container.resolve(UpdateUserActiveServices);
-    const user_id = request.user.id;
+    const user_id = request.params.id;
 
     await updateUserActiveServices.execute({ user_id });
 
