@@ -45,6 +45,10 @@ class AuthenticateUserServices {
             throw new AppError('E-mail não confirmado!', 400);
         }
 
+        if (!user.active) {
+            throw new AppError('Usuário inativo!', 400);
+        }
+
         const { secret, expiresIn } = jwtConfig.jwt;
 
         if (!secret) {
