@@ -37,6 +37,9 @@ class User {
     @Column('boolean')
     confirm_email: boolean;
 
+    @Column('boolean')
+    active: boolean;
+
     @CreateDateColumn()
     created_at: Date;
 
