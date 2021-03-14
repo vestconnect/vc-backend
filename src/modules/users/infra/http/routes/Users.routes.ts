@@ -11,6 +11,7 @@ import UserBackgroundController from '../controllers/UserBackgroundController';
 import ConfirmEmailController from '../controllers/ConfirmEmailController';
 import ProvidersController from '../controllers/ProvidersController';
 import UserActiveController from '../controllers/UserActiveController';
+import UsersProviderController from '../controllers/UsersProviderController';
 import User from '@modules/users/infra/typeorm/entities/User';
 import { classToClass } from 'class-transformer';
 
@@ -23,10 +24,11 @@ const userBackgroundController = new UserBackgroundController();
 const confirmEmailController = new ConfirmEmailController();
 const providersController = new ProvidersController();
 const userActiveController = new UserActiveController();
+const usersProviderController = new UsersProviderController();
 
 usersRouter.get('/', ensureAuthenticated, providersController.indexOld);
 usersRouter.get('/providers', ensureAuthenticated, providersController.index);
-
+usersRouter.put('/providers/:id', ensureAuthenticated, usersProviderController.update);
 usersRouter.get('/:id', async (request, response) => {
     const userRepository = getRepository(User);
     const id = request.params.id;
@@ -35,7 +37,6 @@ usersRouter.get('/:id', async (request, response) => {
 
     response.json(classToClass(user));
 });
-
 usersRouter.post('/', usersController.create);
 usersRouter.patch('/password', ensureAuthenticated, userPasswordController.update);
 usersRouter.patch('/avatar', ensureAuthenticated, upload.single('avatar'), userAvatarController.update);
