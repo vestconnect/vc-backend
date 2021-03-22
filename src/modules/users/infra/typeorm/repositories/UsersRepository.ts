@@ -67,11 +67,46 @@ class UsersRepository implements IUsersRepository {
         const [providers, total] = await this.ormRepository.findAndCount({
             where: { type: '1' },
             skip,
-            take: 10
+            take: 10,
+            order: { name: 'ASC' }
         });
 
         return {
             users: providers,
+            total,
+            total_pages: Math.ceil(total / 10)
+        };
+    }
+
+    public async findUsers(page: number): Promise<IReturnUsers> {
+        const skip = page > 1 ? (page - 1) * 10 : 0;
+
+        const [users, total] = await this.ormRepository.findAndCount({
+            where: { type: null },
+            skip,
+            take: 10,
+            order: { name: 'ASC' }
+        });
+
+        return {
+            users: users,
+            total,
+            total_pages: Math.ceil(total / 10)
+        };
+    }
+
+    public async findAdmins(page: number): Promise<IReturnUsers> {
+        const skip = page > 1 ? (page - 1) * 10 : 0;
+
+        const [users, total] = await this.ormRepository.findAndCount({
+            where: { type: '2' },
+            skip,
+            take: 10,
+            order: { name: 'ASC' }
+        });
+
+        return {
+            users: users,
             total,
             total_pages: Math.ceil(total / 10)
         };

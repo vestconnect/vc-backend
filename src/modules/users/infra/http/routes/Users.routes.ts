@@ -26,7 +26,8 @@ const providersController = new ProvidersController();
 const userActiveController = new UserActiveController();
 const usersProviderController = new UsersProviderController();
 
-usersRouter.get('/', ensureAuthenticated, providersController.indexOld);
+usersRouter.get('/', ensureAuthenticated, usersController.indexRegisters);
+usersRouter.get('/admin', ensureAuthenticated, usersController.indexRegisters);
 usersRouter.get('/providers', ensureAuthenticated, providersController.index);
 usersRouter.put('/providers/:id', ensureAuthenticated, usersProviderController.update);
 usersRouter.get('/:id', async (request, response) => {

@@ -52,7 +52,9 @@ class User {
             return null;
         }
 
-        return format(new Date(this.birth), 'yyyy-MM-dd');
+        const date = new Date(this.birth);
+
+        return date.toLocaleDateString('pt-br', { year: 'numeric', month: 'long', day: 'numeric' })
     }
 
     @Expose({ name: 'created' })
