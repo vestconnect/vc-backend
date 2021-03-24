@@ -8,8 +8,9 @@ import IProductsUserNotificationsRepository from "../repositories/IProductsUserN
 import ISelectedProductsUserNotificationsRepository from "../repositories/ISelectedProductsUserNotificationsRepository";
 
 interface IRequest {
-  product_id: string;
+  product_id?: string;
   message: string;
+  url?: string;
 }
 
 @injectable()
@@ -27,9 +28,9 @@ class SendNotificationProductServices {
     private productsUserNotificationsRepository: IProductsUserNotificationsRepository,
     @inject("SelectedProductsUserNotificationsRepository")
     private selectedProductsUserNotificationsRepository: ISelectedProductsUserNotificationsRepository
-  ) {}
+  ) { }
 
-  public async execute({ product_id, message }: IRequest): Promise<void> {
+  public async execute({ product_id, message, url }: IRequest): Promise<void> {
     let tokens: string[] = [];
 
     if (product_id) {
@@ -58,6 +59,8 @@ class SendNotificationProductServices {
         await this.productsUserNotificationsRepository.create({
           product_id,
           user_id: users.user_id,
+          message,
+          url
         });
       }
     } else {
@@ -66,10 +69,19 @@ class SendNotificationProductServices {
       userTokens.forEach((userToken) => {
         tokens.push(userToken.token);
       });
+
+      for (const users of userTokens) {
+        await this.productsUserNotificationsRepository.create({
+          product_id,
+          user_id: users.user_id,
+          message,
+          url
+        });
+      }
     }
 
     this.oneSignal.sendNotification({
-      headings: "Vest Connect",
+      headings: "VestConnect",
       contents: message,
       players_id: tokens,
     });

@@ -20,6 +20,16 @@ class ProductsUserNotificationsRepository
     return productUserNotification;
   }
 
+  public async findByUserId(
+    user_id: string
+  ): Promise<ProductUserNotification[]> {
+    const productUserNotification = await this.ormRepository.find({
+      where: { user_id },
+    });
+
+    return productUserNotification;
+  }
+
   public async findByProduct(
     product_id: string
   ): Promise<ProductUserNotification | undefined> {

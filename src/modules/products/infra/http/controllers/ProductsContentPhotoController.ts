@@ -9,13 +9,14 @@ export default class ProductsContentPhotoController {
       CreateProductContentPhotoServices
     );
 
-    const { title, description, content_id } = request.body;
+    const { title, description, content_id, url } = request.body;
 
     const productContentPhoto = await createProductContentPhotoServices.execute(
       {
         title,
         description,
         content_id,
+        url
       }
     );
 

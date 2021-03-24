@@ -13,6 +13,7 @@ import ProductsTagsRouter from '@modules/products/infra/http/routes/ProductsTags
 import ProductsTagsNfcRouter from '@modules/products/infra/http/routes/ProductsTagsNfc.routes';
 import ProductsUserRouter from '@modules/products/infra/http/routes/ProductsUser.routes';
 import PasswordsRouter from '@modules/products/infra/http/routes/Passwords.routes';
+import ProductUserNotificationRouter from '@modules/products/infra/http/routes/ProductUserNotification.routes';
 import DashboardRouter from '@modules/dashboard/infra/http/routes/Dashboard.routes';
 
 const routes = Router();
@@ -31,5 +32,6 @@ routes.use('/productsuser', ProductsUserRouter);
 routes.use('/password', UserTokenResetRouter);
 routes.use('/passwords', PasswordsRouter);
 routes.use('/dashboard', DashboardRouter);
+routes.use('/notification', ProductUserNotificationRouter);
 
 export default routes;

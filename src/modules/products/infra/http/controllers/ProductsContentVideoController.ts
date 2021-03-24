@@ -9,13 +9,14 @@ export default class ProductsContentVideoController {
       CreateProductContentVideoServices
     );
 
-    const { title, description, content_id } = request.body;
+    const { title, description, content_id, url } = request.body;
 
     const productContentVideo = await createProductContentVideoServices.execute(
       {
         title,
         description,
         content_id,
+        url
       }
     );
 

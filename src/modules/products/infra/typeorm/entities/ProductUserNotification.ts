@@ -17,6 +17,12 @@ class ProductUser {
     @Column('boolean')
     read: boolean;
 
+    @Column('varchar')
+    message: string;
+
+    @Column('varchar')
+    url: string;
+
     @OneToOne(() => Product)
     @JoinColumn({ name: 'product_id' })
     product: Product;

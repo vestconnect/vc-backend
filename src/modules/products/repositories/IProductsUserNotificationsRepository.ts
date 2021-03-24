@@ -4,6 +4,7 @@ import ICountNotReadProductUserNotificationsDTO from "../dtos/ICountNotReadProdu
 
 export default interface IProductsUserNotificationsRepository {
   findById(id: string): Promise<ProductUserNotification | undefined>;
+  findByUserId(user_id: string): Promise<ProductUserNotification[]>;
   findByProduct(
     product_id: string
   ): Promise<ProductUserNotification | undefined>;

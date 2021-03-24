@@ -23,6 +23,9 @@ class ProductContentPhoto {
     @Column('varchar')
     file: string;
 
+    @Column('varchar')
+    url: string;
+
     @OneToOne(() => ProductContent)
     @JoinColumn({ name: 'content_id' })
     product_content: ProductContent;

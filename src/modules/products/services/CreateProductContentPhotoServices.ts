@@ -11,6 +11,7 @@ interface IRequest {
     title: string;
     description: string;
     content_id: string;
+    url?: string;
 }
 
 @injectable()
@@ -26,7 +27,7 @@ class CreateProductContentPhotoServices {
         private cacheProvider: ICacheProvider
     ) { }
 
-    public async execute({ title, description, content_id }: IRequest): Promise<ProductContentPhoto> {
+    public async execute({ title, description, content_id, url }: IRequest): Promise<ProductContentPhoto> {
         const sendNotificationProductServices = container.resolve(SendNotificationProductServices);
         const productContent = await this.productsContentRepository.findById(content_id);
 
@@ -37,7 +38,8 @@ class CreateProductContentPhotoServices {
         const productContentPhoto = await this.productsContentPhotoRepository.create({
             title,
             description,
-            content_id
+            content_id,
+            url
         });
 
         const product = await this.productsRepository.findById(productContent.product_id);
