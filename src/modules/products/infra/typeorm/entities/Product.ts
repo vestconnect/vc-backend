@@ -37,6 +37,9 @@ class Product {
     @Column('boolean')
     active: boolean;
 
+    @Column('boolean')
+    need_password: boolean;
+
     @OneToOne(() => User)
     @JoinColumn({ name: 'user_id' })
     user: User;

@@ -12,6 +12,7 @@ interface IRequest {
     validate: Date;
     description: string;
     active: boolean;
+    need_password: boolean;
 }
 
 @injectable()
@@ -23,7 +24,16 @@ class UpdateProductServices {
         private cacheProvider: ICacheProvider
     ) { }
 
-    public async update({ id, nfc_id, title, subtitle, validate, description, active }: IRequest): Promise<Product> {
+    public async update({
+        id,
+        nfc_id,
+        title,
+        subtitle,
+        validate,
+        description,
+        active,
+        need_password
+    }: IRequest): Promise<Product> {
         const product = await this.productRepository.findById(id);
 
         if (!product) {
@@ -42,6 +52,7 @@ class UpdateProductServices {
         product.validate = validate;
         product.description = description;
         product.active = active;
+        product.need_password = need_password;
 
         await this.productRepository.save(product);
 

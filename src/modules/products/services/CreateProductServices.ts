@@ -11,6 +11,7 @@ interface IRequest {
     validate: Date;
     description: string;
     active: boolean;
+    need_password: boolean;
 }
 
 @injectable()

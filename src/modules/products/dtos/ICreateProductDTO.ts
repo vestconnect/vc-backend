@@ -5,4 +5,5 @@ export default interface ICreateProductDTO {
     validate: Date;
     description: string;
     active: boolean;
+    need_password: boolean;
 }

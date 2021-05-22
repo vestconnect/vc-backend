@@ -5,6 +5,7 @@ import Product from "@modules/products/infra/typeorm/entities/Product";
 import ensureAuthenticated from "@modules/users/infra/http/middlewares/ensureAuthenticated";
 import uploadConfig from "@config/upload";
 import ProductsController from "../controllers/ProductsController";
+import VerifyIfProductNeedPasswordController from "../controllers/VerifyIfProductNeedPasswordController";
 import ProductAvatarController from "../controllers/ProductAvatarController";
 import ProductBackgroundController from "../controllers/ProductBackgroundController";
 import ProductNotificationController from "../controllers/ProductNotificationController";
@@ -16,6 +17,7 @@ const productsController = new ProductsController();
 const productAvatarController = new ProductAvatarController();
 const productBackgroundController = new ProductBackgroundController();
 const productNotificationController = new ProductNotificationController();
+const verifyIfProductNeedPasswordController = new VerifyIfProductNeedPasswordController()
 
 productsRouter.get("/", ensureAuthenticated, async (request, response) => {
   const productRepository = getRepository(Product);
@@ -53,6 +55,7 @@ productsRouter.get("/:id", ensureAuthenticated, async (request, response) => {
   response.json(classToClass(products));
 });
 productsRouter.get("/:nfc/nfc", productsController.index);
+productsRouter.get("/:id/need-password", verifyIfProductNeedPasswordController.index);
 productsRouter.put("/", ensureAuthenticated, productsController.update);
 productsRouter.post("/", ensureAuthenticated, productsController.create);
 productsRouter.post(

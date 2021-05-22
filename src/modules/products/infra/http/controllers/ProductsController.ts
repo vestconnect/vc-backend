@@ -24,6 +24,7 @@ export default class ProductsController {
       validate,
       description,
       active,
+      need_password,
     } = request.body;
 
     const updateProduct = container.resolve(UpdateProductServices);
@@ -36,6 +37,7 @@ export default class ProductsController {
       validate,
       description,
       active,
+      need_password,
     });
 
     return response.json(prd);
@@ -50,6 +52,7 @@ export default class ProductsController {
       validate,
       description,
       active,
+      need_password,
     } = request.body;
 
     const createProductServices = container.resolve(CreateProductServices);
@@ -62,6 +65,7 @@ export default class ProductsController {
       validate,
       description,
       active,
+      need_password,
     });
 
     return response.json(product);
